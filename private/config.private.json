@@ -1,0 +1,132 @@
+{
+  "port": 4001,
+  "address": "0.0.0.0",
+  "version": "0.3.0",
+  "fileLogLevel": "info",
+  "logFileName": "logs/ark.log",
+  "consoleLogLevel": "debug",
+  "trustProxy": false,
+  "db": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "kapu_testnet",
+    "user": null,
+    "password": "password",
+    "poolSize": 20,
+    "poolIdleTimeout": 30000,
+    "reapIntervalMillis": 1000,
+    "logEvents": [
+      "error"
+    ]
+  },
+  "api": {
+    "mount": true,
+    "access": {
+      "whiteList": []
+    },
+    "options": {
+      "limits": {
+        "max": 0,
+        "delayMs": 0,
+        "delayAfter": 0,
+        "windowMs": 60000
+      }
+    }
+  },
+  "peers": {
+    "minimumNetworkReach": 1,
+    "list": [
+      {
+        "ip": "51.15.59.104",
+        "port": 4001
+      }
+    ],
+    "blackList": [],
+    "options": {
+      "limits": {
+        "max": 0,
+        "delayMs": 0,
+        "delayAfter": 0,
+        "windowMs": 60000
+      },
+      "maxUpdatePeers": 20,
+      "timeout": 5000
+    }
+  },
+  "forging": {
+    "coldstart": 6,
+    "force": true,
+    "secret": [
+"property hurdle special edit usage diesel dumb bundle crop claim camera survey",
+"check act assist plunge trust column box service glass pudding input dress",
+      "city document shrug involve fun prison matrix world bottom husband skin pet",
+      "brother capital airport lyrics conduct fancy food build orphan record void tennis",
+      "orbit good photo audit fall scrap student tuition panic else live dutch",
+      "exact tool airport garment live drink boil baby acoustic submit upon drill",
+      "focus charge ritual cart before balance news liar inch hedgehog ceiling glue",
+      "sunset oyster bus pool dinner quantum spot quarter old morning thunder way",
+      "layer permit series wave heavy bleak explain target deliver actual client diesel",
+      "sail claw negative fault jungle rabbit uniform barely visual elephant mobile various",
+      "human vapor grab edit faint wolf verb crush clown plug chaos destroy",
+      "vital grid run attend enough belt used case judge reform future device",
+      "boil make assault magic original private jar possible relax error curious opera",
+      "inside cream always mom hero lonely hollow cabbage clap black copper engine",
+      "fiber nuclear able leopard submit elephant clarify female film silk minimum illness",
+      "unit lunch rude sense banner style card gun mixture deliver target beef",
+      "winner library correct borrow same ocean essence resemble gorilla myth abandon category",
+      "crop angle doctor tell able kit juice mention enable absorb chaos run",
+      "square stick soap cheap any travel silly morning daring bird defense fold",
+      "dizzy atom urge hope naive blossom cousin dwarf tired business swallow saddle",
+      "short depend public night total ignore wide patch mesh disagree hurdle bench",
+      "panda effort rapid sauce uncle huge horse runway reveal office drink repeat",
+      "hour range loyal market modify copy soldier earn interest moment run gap",
+      "hamster memory hat pottery clip gospel erosion space vehicle culture path carry",
+      "beyond forest found target wide crop bench black ceiling brave glass wall",
+      "fame pave loop seek never combine order jazz burger execute usage canal",
+      "payment meadow since conduct kid marine collect heart market army citizen long",
+      "hard veteran proof spoon wine black exist always blanket breeze unit turtle",
+      "young tuition slow drift subway tape agent world market ridge loud infant",
+      "letter shoe forward problem menu cup panic bone hammer shove glare discover",
+      "reflect finger very match club brief hollow bind slam window cat kitten",
+      "bulb good correct want host vanish more develop pulse retire bench glove",
+      "harsh dove parent hole oppose stone almost poverty soul spike expect palm",
+      "hand system hollow keep coast deny tool unaware awkward moral release outside",
+      "shock poet address notice donate camera ribbon syrup cool provide sport stock",
+      "brick label when box arm index drill toward sausage town bundle fine",
+      "struggle barrel surround time piano ladder lunch foster common tribe orbit enforce",
+      "broccoli boy announce dumb world aware toast neck kangaroo shiver tired card",
+      "inside dynamic require thought camp weapon attitude food absorb amazing share shoe",
+      "bread husband cloud ceiling erosion silly abuse armor produce inherit action obscure",
+      "curious twelve copper buyer direct place joke axis stem concert fringe chimney",
+      "elegant lava run forum hobby bread need identify void cream now dignity",
+      "lucky feed apple message enrich high observe depart burst surprise stand chaos",
+      "rose appear session size shallow cherry satoshi garbage fashion fan swap hire",
+      "scout brave order keen entire limit cram ocean fabric pill horse again",
+      "century scheme sleep memory office crash cry light grit provide half mixed",
+      "love genuine park install mind maple merit wrist people advice more slot",
+      "finish gain carpet patrol scene knock creek music birth kidney scheme scorpion",
+      "spot spatial phrase reform foam copy cannon drop ship deer sell cabin",
+      "ski drum supreme spot dentist coconut away fiber arch dolphin sure pride",
+      "daughter ahead move road cause fly comfort garage arm mixed mixed donkey"
+    ],
+    "access": {
+      "whiteList": [
+        "127.0.0.1"
+      ]
+    }
+  },
+  "loading": {
+    "verifyOnLoading": false,
+    "loadPerIteration": 5000
+  },
+  "ssl": {
+    "enabled": false,
+    "options": {
+      "port": 443,
+      "address": "0.0.0.0",
+      "key": "./ssl/ark.key",
+      "cert": "./ssl/ark.crt"
+    }
+  },
+  "nethash": "167130d695be9f945878237b84e3683c50ced3bbce4e4bf850ef6f9de166535e"
+}
