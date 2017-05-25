@@ -88,9 +88,7 @@ To launch Ark on testnet:
 
 Edit config.testnet.json  you Passrh
 
-add "http://51.15.59.104:4001" to ip field using gear icon/manage networks/new in ark wallet.
-
-node is running from screen node app.js -c ./config.testnet.json -g ./genesisBlock.testnet.json
+Node is running from screen node app.js -c ./config.testnet.json -g ./genesisBlock.testnet.json
 
 Open Ark Wallet  
 
