@@ -80,7 +80,7 @@ sudo npm install grunt-cli -g
 
 Clone this repository
 ```
-git clone https://github.com/arkecosytem/ark-node.git
+git clone https://github.com/kapucoin/kapu-node.git
 cd kapu-node
 ```
 
