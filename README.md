@@ -99,7 +99,10 @@ screen node app.js  -c ./config.testnet.json -g ./genesisBlock.testnet.json
 
 Open Ark Wallet  
 Add: Manage Network  
-insert nethash : 167130d695be9f945878237b84e3683c50ced3bbce4e4bf850ef6f9de166535e
+insert nethash :
+
+167130d695be9f945878237b84e3683c50ced3bbce4e4bf850ef6f9de166535e
+
 Save
 
 
