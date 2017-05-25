@@ -9,12 +9,7 @@ This version is still alpha, use at your own risks
 ## Install, Upgrade etc...
 You need to provision a linux (ubuntu tested) server (digital ocean, vultur or other).
 
-Then use the excellent ark-commander script
-```
-cd
-wget https://ark.io/ARKcommander.sh
-bash ARKcommander.sh
-```
+
 
 For developers, please read below in section "Developer Installation"
 
