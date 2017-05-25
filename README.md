@@ -1,8 +1,6 @@
-# Ark
+# KAPU 
 
-Ark is a next generation crypto-currency and decentralized application platform, written entirely in JavaScript. For more information please refer to our website: https://ark.io/.
-
-The Token Exchange Campaign is up at https://tec.ark.io
+Kapu is Fork Ark is a next generation crypto-currency and decentralized application platform, written entirely in JavaScript. For more information please refer to our website: https://ark.io/.
 
 This version is still alpha, use at your own risks
 
@@ -90,13 +88,13 @@ To launch Ark on testnet:
 
 Edit config.testnet.json  you Passrh
 
-screen node app.js  -c ./config.testnet.json -g ./genesisBlock.testnet.json 
+add "http://51.15.59.104:4001" to ip field using gear icon/manage networks/new in ark wallet.
+
+node is running from screen node app.js -c ./config.testnet.json -g ./genesisBlock.testnet.json
 
 Open Ark Wallet  
-Add: Manage Network  
-insert nethash :
 
-167130d695be9f945878237b84e3683c50ced3bbce4e4bf850ef6f9de166535e
+add "http://51.15.59.104:4001" to ip field using gear icon/manage networks/new in ark wallet.
 
 Save
 
