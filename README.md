@@ -61,7 +61,7 @@ Install PostgreSQL (min version: 9.5.2)
 ```
 sudo apt-get install -y postgresql postgresql-contrib
 sudo -u postgres createuser --createdb --password $USER
-createdb ark_test
+createdb kapu_testnet
 ```
 
 Install Node.js (tested with version 6.9.2, but any recent LTS release should do):
@@ -81,7 +81,7 @@ sudo npm install grunt-cli -g
 Clone this repository
 ```
 git clone https://github.com/arkecosytem/ark-node.git
-cd ark-node
+cd kapu-node
 ```
 
 Install node modules:
@@ -92,10 +92,16 @@ npm install
 
 ## Launch
 To launch Ark on testnet:
-```
-createdb ark_testnet
-node run start:testnet
-```
+
+Edit config.testnet.json  you Passrh
+
+screen node app.js  -c ./config.testnet.json -g ./genesisBlock.testnet.json 
+
+Open Ark Wallet  
+Add: Manage Network  
+insert nethash : 167130d695be9f945878237b84e3683c50ced3bbce4e4bf850ef6f9de166535e
+Save
+
 
 To launch Ark on devtnet:
 ```
