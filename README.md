@@ -46,9 +46,8 @@ Install essentials:
 
 ```
 Create New User 
-adduser xxx
-Permission Sudo
-adduser xxx sudo
+adduser your_user
+adduser your_user sudo
 switch new user 
 
 sudo apt-get update
@@ -58,8 +57,7 @@ sudo apt-get install -y curl build-essential python git
 Install PostgreSQL (min version: 9.5.2)
 
 ```
-sudo apt-get install -y postgresql postgresql-contrib libpq-dev
-sudo su postgres "insert pwd" 
+sudo apt-get install -y postgresql postgresql-contrib libpq-dev 
 sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD 'password';"
 createdb kapu_testnet
 ```
