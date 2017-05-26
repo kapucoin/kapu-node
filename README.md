@@ -85,9 +85,9 @@ npm install
 ```
 
 ## Launch
-To launch Kapu on testnet:
-...
+To launch Kapu on TestNet:
 
+```
 Edit config.testnet.json  you Passrh
 
 Node is running from:
@@ -99,12 +99,6 @@ Open Ark Wallet
 add "http://51.15.59.104:4001" to ip field using gear icon/manage networks/new in ark wallet.
 
 Save
-...
-
-To launch Kapu on devtnet:
-```
-createdb ark_devnet
-node run start:devnet
 ```
 
 To launch Ark on mainnet (when launched):
