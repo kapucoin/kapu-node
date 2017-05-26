@@ -45,6 +45,12 @@ This is a fork from Lisk with the following features:
 Install essentials:
 
 ```
+Create New User 
+adduser xxx
+Permission Sudo
+adduser xxx sudo
+switch new user 
+
 sudo apt-get update
 sudo apt-get install -y curl build-essential python git
 ```
