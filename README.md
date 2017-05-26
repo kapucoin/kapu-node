@@ -53,7 +53,8 @@ Install PostgreSQL (min version: 9.5.2)
 
 ```
 sudo apt-get install -y postgresql postgresql-contrib libpq-dev
-sudo -u postgres createuser --createdb --password $USER
+sudo su postgres "inserire pwd" 
+sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD 'password';"
 createdb kapu_testnet
 ```
 
