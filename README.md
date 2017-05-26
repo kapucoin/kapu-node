@@ -53,7 +53,7 @@ Install PostgreSQL (min version: 9.5.2)
 
 ```
 sudo apt-get install -y postgresql postgresql-contrib libpq-dev
-sudo su postgres "inserire pwd" 
+sudo su postgres "insert pwd" 
 sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD 'password';"
 createdb kapu_testnet
 ```
@@ -85,7 +85,7 @@ npm install
 ```
 
 ## Launch
-To launch Ark on testnet:
+To launch Kapu on testnet:
 
 Edit config.testnet.json  you Passrh
 
@@ -98,7 +98,7 @@ add "http://51.15.59.104:4001" to ip field using gear icon/manage networks/new i
 Save
 
 
-To launch Ark on devtnet:
+To launch Kapu on devtnet:
 ```
 createdb ark_devnet
 node run start:devnet
