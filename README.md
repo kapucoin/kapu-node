@@ -42,7 +42,7 @@ This is a fork from Lisk with the following features:
 
 ## Developer Installation
 
-
+```
 Install essentials:
 
 Create New User 
@@ -63,32 +63,35 @@ sudo apt-get install -y nodejs
 sudo apt-get install npm -y
 sudo npm install -g n
 sudo n 6.9.2
- 
+ ```
 
 
 Install grunt-cli (globally):
-
+```
 sudo npm install grunt-cli -g
+```
 Clone this repository
-
+```
 git clone https://github.com/kapucoin/kapu-node.git
 cd kapu-node
+```
 Install node modules:
-
+```
 npm install libpq secp256k1
 npm install
+```
 Launch
 
 To launch Kapu on TestNet:
-
+```
 Edit config.testnet.json  you Passrh
-
+```
 Node is running from:
-
+```
 screen node app.js -c ./config.testnet.json -g ./genesisBlock.testnet.json
-
+```
 Open Ark Wallet  
-
+```
 add "http://51.15.59.104:4001" to ip field using gear icon/manage networks/new in ark wallet.
 
 Save
