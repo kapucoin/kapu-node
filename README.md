@@ -46,19 +46,24 @@ This is a fork from Lisk with the following features:
 Install essentials:
 
 Create New User 
+```
 adduser your_user
 adduser your_user sudo
 su - your_user 
 
 sudo apt-get update
 sudo apt-get install -y curl build-essential python git
+```
 Install PostgreSQL (min version: 9.5.2)
+```
 sudo apt-get install -y postgresql postgresql-contrib libpq-dev 
 sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD 'password';"
 sudo su postgres
 createdb kapu_testnet
 exit 
+```
 Install Node.js (tested with version 6.9.2, but any recent LTS release should do):
+```
 sudo apt-get install -y nodejs
 sudo apt-get install npm -y
 sudo npm install -g n
@@ -90,7 +95,7 @@ Node is running from:
 ```
 screen node app.js -c ./config.testnet.json -g ./genesisBlock.testnet.json
 ```
-Open Ark Wallet  
+Open Ark Wallet  1.22 
 ```
 add "http://51.15.59.104:4001" to ip field using gear icon/manage networks/new in ark wallet.
 
