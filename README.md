@@ -42,65 +42,45 @@ This is a fork from Lisk with the following features:
 
 ## Developer Installation
 
+
 Install essentials:
 
-```
 Create New User 
 adduser your_user
 adduser your_user sudo
-switch new user 
+su - your_user 
 
 sudo apt-get update
 sudo apt-get install -y curl build-essential python git
-```
-
 Install PostgreSQL (min version: 9.5.2)
-
-```
 sudo apt-get install -y postgresql postgresql-contrib libpq-dev 
 sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD 'password';"
+sudo su postgres
 createdb kapu_testnet
-```
-
+exit 
 Install Node.js (tested with version 6.9.2, but any recent LTS release should do):
-
-```
 sudo apt-get install -y nodejs
+sudo apt-get install npm -y
 sudo npm install -g n
 sudo n 6.9.2
  
- FAIL USE MANUAL INSTALLATION
- 
-If it fails the first node installation uses this:
- 
-cd ~
-curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
 
-sudo bash nodesource_setup.sh
-```
 
 Install grunt-cli (globally):
 
-```
 sudo npm install grunt-cli -g
-```
-
 Clone this repository
-```
+
 git clone https://github.com/kapucoin/kapu-node.git
 cd kapu-node
-```
-
 Install node modules:
-```
+
 npm install libpq secp256k1
 npm install
-```
+Launch
 
-## Launch
 To launch Kapu on TestNet:
 
-```
 Edit config.testnet.json  you Passrh
 
 Node is running from:
