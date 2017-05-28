@@ -42,14 +42,15 @@ This is a fork from Lisk with the following features:
 
 ## Developer Installation
 
-Install essentials:
 
 Create New User 
 ```
 adduser your_user
 adduser your_user sudo
 su - your_user 
-...
+```
+Install essentials:
+```
 sudo apt-get update
 sudo apt-get install -y curl build-essential python git
 ```
