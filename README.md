@@ -68,6 +68,15 @@ Install Node.js (tested with version 6.9.2, but any recent LTS release should do
 sudo apt-get install -y nodejs
 sudo npm install -g n
 sudo n 6.9.2
+ 
+ FAIL USE MANUAL INSTALLATION
+ 
+If it fails the first node installation uses this:
+ 
+cd ~
+curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
+
+sudo bash nodesource_setup.sh
 ```
 
 Install grunt-cli (globally):
