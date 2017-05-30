@@ -93,7 +93,8 @@ Edit config.testnet.json  you Passrh
 ```
 Node is running from:
 ```
-screen node app.js -c ./config.testnet.json -g ./genesisBlock.testnet.json
+sudo npm install forever -g
+forever start app.js -c ./config.testnet.json -g ./genesisBlock.testnet.json
 ```
 Open Ark Wallet  1.22 
 ```
