@@ -39,6 +39,13 @@ This is a fork from Lisk with the following features:
 - stable on testnet at 5tx/s
 - pushed to 10tx/s on devnet
 
+## Automatic Installation KAPU SHELL
+
+```
+http://www.kapu.one/KAPUshell.sh
+```
+
+
 
 ## Developer Installation
 
