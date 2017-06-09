@@ -54,6 +54,11 @@ wget http://www.kapu.one/KAPUshell.sh
 
 bash KAPUshell.sh
 
+For Restore Last Blockchain
+
+Dgt "4" Rebuild Database
+
+
 ```
 
 
