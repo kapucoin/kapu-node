@@ -1,9 +1,9 @@
 {
-  "port": 9301,
+  "port": 9410,
   "address": "0.0.0.0",
   "version": "1.0.1",
   "fileLogLevel": "info",
-  "logFileName": "logs/ark.log",
+  "logFileName": "logs/kapu.log",
   "consoleLogLevel": "info",
   "trustProxy": false,
   "db": {
@@ -34,8 +34,21 @@
     }
   },
   "peers": {
-    "minimumNetworkReach": 1,
+    "minimumNetworkReach": 5,
     "list": [
+      
+          {"ip":"51.15.59.104","port":4600},
+          {"ip":"194.135.82.104","port":4600},
+          {"ip":"94.176.238.173","port":4600},
+          {"ip":"185.5.55.249","port":4600},
+          {"ip":"94.176.233.213","port":4600},
+          {"ip":"94.176.236.51","port":4600},
+          {"ip":"94.176.233.210","port":4600},
+          {"ip":"185.69.54.74","port":4600},
+          {"ip": "94.176.233.244","port":4600},
+          {"ip": "94.176.233.244","port":4600},
+          {"ip": "51.15.69.62","port":4600}
+      
      
     ],
     "blackList": [],
@@ -69,10 +82,10 @@
     "options": {
       "port": 443,
       "address": "0.0.0.0",
-      "key": "./ssl/ark.key",
-      "cert": "./ssl/ark.crt"
+      "key": "./ssl/kapu.key",
+      "cert": "./ssl/kapu.crt"
     }
   },
-  "network":"ark",
-  "nethash": "6e84d08bd299ed97c212c886c98a57e36545c8f5d645ca7eeae63a8bd62d8988"
+  "network":"kapu",
+  "nethash": "bb816057197d40b572fce5174c50a285b457fcd7f12e2a2d35eeae402750c581"
 }
