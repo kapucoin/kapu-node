@@ -1,20 +1,13 @@
-# Ark
+# KAPU 
 
-Ark is a next generation crypto-currency and decentralized application platform, written entirely in JavaScript. For more information please refer to our website: https://ark.io/.
-
-The Token Exchange Campaign is up at https://tec.ark.io
+Kapu is Fork Ark is a next generation crypto-currency and decentralized application platform, written entirely in JavaScript. For more information please refer to our website: https://ark.io/.
 
 This version is still alpha, use at your own risks
 
 ## Install, Upgrade etc...
 You need to provision a linux (ubuntu tested) server (digital ocean, vultur or other).
 
-Then use the excellent ark-commander script
-```
-cd
-wget https://ark.io/ARKcommander.sh
-bash ARKcommander.sh
-```
+
 
 For developers, please read below in section "Developer Installation"
 
@@ -47,60 +40,89 @@ This is a fork from Lisk with the following features:
 - pushed to 10tx/s on devnet
 
 
+## Automatic Installation KAPU Node "TESTNET"
+
+Create New User 
+```
+adduser your_user
+adduser your_user sudo
+su - your_user 
+```
+
+```
+wget http://www.kapu.one/KAPUshell.sh
+
+bash KAPUshell.sh
+
+For Restore Last Blockchain
+
+Dgt "4" Rebuild Database
+
+
+```
+
+
 ## Developer Installation
 
-Install essentials:
 
+Create New User 
+```
+adduser your_user
+adduser your_user sudo
+su - your_user 
+```
+Install essentials:
 ```
 sudo apt-get update
 sudo apt-get install -y curl build-essential python git
 ```
-
 Install PostgreSQL (min version: 9.5.2)
-
 ```
-sudo apt-get install -y postgresql postgresql-contrib
-sudo -u postgres createuser --createdb --password $USER
-createdb ark_test
+sudo apt-get install -y postgresql postgresql-contrib libpq-dev 
+sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD 'password';"
+sudo su postgres
+createdb kapu_testnet
+exit 
 ```
-
 Install Node.js (tested with version 6.9.2, but any recent LTS release should do):
-
 ```
 sudo apt-get install -y nodejs
+sudo apt-get install npm -y
 sudo npm install -g n
 sudo n 6.9.2
-```
+ ```
+
 
 Install grunt-cli (globally):
-
 ```
 sudo npm install grunt-cli -g
 ```
-
 Clone this repository
 ```
-git clone https://github.com/arkecosytem/ark-node.git
-cd ark-node
+git clone https://github.com/kapucoin/kapu-node.git
+cd kapu-node
 ```
-
 Install node modules:
 ```
 npm install libpq secp256k1
 npm install
 ```
+Launch
 
-## Launch
-To launch Ark on testnet:
+To launch Kapu on TestNet:
 ```
-createdb ark_testnet
-node run start:testnet
+Edit config.testnet.json  you Passrh
 ```
+Node is running from:
+```
+sudo npm install forever -g
+forever start app.js -c ./config.testnet.json -g ./genesisBlock.testnet.json
+```
+Open Ark Wallet  1.22 
+```
+add "http://51.15.59.104:4001" to ip field using gear icon/manage networks/new in ark wallet.
 
-To launch Ark on devtnet:
-```
-createdb ark_devnet
-node run start:devnet
+Save
 ```
 
 To launch Ark on mainnet (when launched):
