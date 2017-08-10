@@ -1,4 +1,4 @@
-# KAPU 
+# KAPU NODE 1.1
 
 KAPU is an Ark Fork, it's a next generation crypto-currency and a decentralized application platform, written entirely in JavaScript.
 
