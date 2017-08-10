@@ -40,7 +40,7 @@ This is a fork from Lisk with the following features:
 - pushed to 10tx/s on devnet
 
 
-## Automatic Installation KAPU Node "TESTNET"
+## Automatic Installation KAPU Node "MainNet"
 
 Create New User 
 ```
