@@ -1,6 +1,6 @@
 # KAPU 
 
-Kapu is Fork Ark is a next generation crypto-currency and decentralized application platform, written entirely in JavaScript. For more information please refer to our website: https://ark.io/.
+KAPU is an Ark Fork, it's a next generation crypto-currency and a decentralized application platform, written entirely in JavaScript.
 
 This version is still alpha, use at your own risks
 
@@ -81,7 +81,7 @@ Install PostgreSQL (min version: 9.5.2)
 sudo apt-get install -y postgresql postgresql-contrib libpq-dev 
 sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD 'password';"
 sudo su postgres
-createdb kapu_testnet
+createdb kapu_mainnet
 exit 
 ```
 Install Node.js (tested with version 6.9.2, but any recent LTS release should do):
