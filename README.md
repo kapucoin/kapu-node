@@ -109,27 +109,21 @@ npm install
 ```
 Launch
 
-To launch Kapu on TestNet:
+To launch Kapu on MainNet:
 ```
 Edit config.testnet.json  you Passrh
 ```
 Node is running from:
 ```
 sudo npm install forever -g
-forever start app.js -c ./config.testnet.json -g ./genesisBlock.testnet.json
+forever start app.js -c ./config.mainnet.json -g ./genesisBlock.mainnet.json
 ```
-Open Ark Wallet  1.22 
+Open Ark Wallet  1.25 
 ```
-add "http://51.15.59.104:4001" to ip field using gear icon/manage networks/new in ark wallet.
 
 Save
 ```
 
-To launch Ark on mainnet (when launched):
-```
-createdb ark_mainnet
-node run start:mainnet
-```
 
 **NOTE:** The **port**, **address**, **genesis block** and **config-path** can be overridden by providing the relevant command switch:
 ```
