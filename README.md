@@ -111,7 +111,7 @@ Launch
 
 To launch Kapu on MainNet:
 ```
-Edit config.testnet.json  you Passrh
+Edit config.mainnet.json  you Secret Passrh
 ```
 Node is running from:
 ```
@@ -120,8 +120,7 @@ forever start app.js -c ./config.mainnet.json -g ./genesisBlock.mainnet.json
 ```
 Open Ark Wallet  1.25 
 ```
-
-Save
+Create New
 ```
 
 
