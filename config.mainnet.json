@@ -57,7 +57,7 @@
     "coldstart": 6,
     "force": true,
     "secret": [
-      
+     
     ],
     "access": {
       "whiteList": [
@@ -79,5 +79,5 @@
     }
   },
   "network": "kapu",
-  "nethash": "a9562cb585629e926c739aa76a0cb17cbf3ad8f77c575ab77f4196ea62813cfb"
+  "nethash": "313ea34c8eb705f79e7bc298b788417ff3f7116c9596f5c9875e769ee2f4ede1"
 }
