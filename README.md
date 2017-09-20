@@ -50,9 +50,9 @@ su - your_user
 ```
 
 ```
-wget http://kapu.one/KAPUshell_mainnet.bash
+wget http://kapu.one/KAPUshell_main.bash
 
-bash KAPUshell_mainnet.sh
+bash KAPUshell_main.bash
 
 For Restore Last Blockchain
 
