@@ -50,7 +50,7 @@ su - your_user
 ```
 
 ```
-wget http://kapu.one/KAPUshell_mainnet.sh
+wget http://kapu.one/KAPUshell_mainnet.bash
 
 bash KAPUshell_mainnet.sh
 
