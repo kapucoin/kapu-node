@@ -124,6 +124,33 @@ Create New
 ```
 
 
+
+## Automatic Installation KAPU Node "TestNet"
+
+Create New User 
+```
+adduser your_user
+adduser your_user sudo
+su - your_user 
+```
+
+```
+wget http://kapu.one/KAPUshell.sh
+
+bash KAPUshell.sh
+
+For Restore Last Blockchain
+
+Dgt "4" Rebuild Database
+
+
+```
+
+
+
+
+
+
 **NOTE:** The **port**, **address**, **genesis block** and **config-path** can be overridden by providing the relevant command switch:
 ```
 node app.js -p [port] -a [address] -c [config-path] -g [genesisBlock-path]
