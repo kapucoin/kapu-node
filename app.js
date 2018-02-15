@@ -1,11 +1,13 @@
 'use strict';
 
 var appConfig = require('./config.json');
+var networks = require('./networks.json');
 var async = require('async');
 var checkIpInList = require('./helpers/checkIpInList.js');
 var extend = require('extend');
 var fs = require('fs');
 var genesisblock = require('./genesisBlock.json');
+var arkjs = require('arkjs');
 var https = require('https');
 var Logger = require('./logger.js');
 var packageJson = require('./package.json');
@@ -22,16 +24,11 @@ process.stdin.resume();
 
 var versionBuild = fs.readFileSync(path.join(__dirname, 'build'), 'utf8');
 
-if (typeof gc !== 'undefined') {
-	setInterval(function () {
-		gc();
-	}, 60000);
-}
-
 program
 	.version(packageJson.version)
 	.option('-c, --config <path>', 'config file path')
 	.option('-g, --genesis <path>', 'genesis block')
+	.option('-n, --networks <path>', 'networks definition file')
 	.option('-p, --port <port>', 'listening port number')
 	.option('-a, --address <ip>', 'listening host name or ip')
 	.option('-x, --peers [peers...]', 'peers list')
@@ -45,6 +42,10 @@ if (program.config) {
 
 if (program.genesis) {
 	genesisblock = require(path.resolve(process.cwd(), program.genesis));
+}
+
+if (program.networks) {
+	networks = require(path.resolve(process.cwd(), program.networks));
 }
 
 if (program.port) {
@@ -80,7 +81,6 @@ if (program.interactive) {
 var config = {
 	db: appConfig.db,
 	modules: {
-		server: './modules/server.js',
 		accounts: './modules/accounts.js',
 		transactions: './modules/transactions.js',
 		blocks: './modules/blocks.js',
@@ -97,6 +97,20 @@ var config = {
 		nodeManager: './modules/nodeManager.js'
 	}
 };
+
+if(appConfig.network){
+	appConfig.network = networks[appConfig.network];
+}
+
+else {
+	appConfig.network = networks.ark;
+}
+
+if(appConfig.modules){
+	for(var name in appConfig.modules){
+		config.modules[name]=appConfig.modules[name];
+	}
+}
 
 var logger = new Logger({ echo: appConfig.consoleLogLevel, errorLevel: appConfig.fileLogLevel, filename: appConfig.logFileName });
 
@@ -147,7 +161,8 @@ d.run(function () {
 		},
 
 		schema: function (cb) {
-			cb(null, new z_schema());
+			var schema = new z_schema(appConfig.network).z_schema
+			cb(null, new schema());
 		},
 
 		network: ['config', function (scope, cb) {
@@ -349,11 +364,12 @@ d.run(function () {
 
 		}],
 
-		ed: function (cb) {
-			cb(null, require('./helpers/ed.js'));
-		},
+		crypto: ['config', function (scope, cb) {
+			var crypto = require('./helpers/crypto.js')
+			cb(null, new crypto(scope));
+		}],
 
-		bus: ['ed', function (scope, cb) {
+		bus: ['crypto', function (scope, cb) {
 			var changeCase = require('change-case');
 			var bus = function () {
 				this.message = function () {
@@ -388,8 +404,8 @@ d.run(function () {
 				db: function (cb) {
 					cb(null, scope.db);
 				},
-				ed: function (cb) {
-					cb(null, scope.ed);
+				crypto: function (cb) {
+					cb(null, scope.crypto);
 				},
 				logger: function (cb) {
 					cb(null, logger);
@@ -402,13 +418,13 @@ d.run(function () {
 						block: genesisblock
 					});
 				},
-				account: ['db', 'bus', 'ed', 'schema', 'genesisblock', function (scope, cb) {
+				account: ['db', 'bus', 'crypto', 'schema', 'genesisblock', function (scope, cb) {
 					new Account(scope, cb);
 				}],
-				transaction: ['db', 'bus', 'ed', 'schema', 'genesisblock', 'account', function (scope, cb) {
+				transaction: ['db', 'bus', 'crypto', 'schema', 'genesisblock', 'account', function (scope, cb) {
 					new Transaction(scope, cb);
 				}],
-				block: ['db', 'bus', 'ed', 'schema', 'genesisblock', 'account', 'transaction', function (scope, cb) {
+				block: ['db', 'bus', 'crypto', 'schema', 'genesisblock', 'account', 'transaction', function (scope, cb) {
 					new Block(scope, cb);
 				}]
 			}, cb);
@@ -445,7 +461,7 @@ d.run(function () {
 		}]
 	}, function (err, scope) {
 		if (err) {
-			logger.fatal(err);
+			scope.logger.fatal(err);
 		} else {
 
 			scope.logger.info('Modules ready and launched');
@@ -514,9 +530,8 @@ function startInteractiveMode(scope){
 			});
 			self.log("Forging:", scope.modules.delegates.isForging());
 			self.log("Active Delegate:", scope.modules.delegates.isActiveDelegate());
-			scope.modules.peers.list(null, function(err, peers){
-				self.log("Connected Peers:", peers.length);
-			});
+			var peers = scope.modules.peers.listBroadcastPeers();
+			self.log("Connected Peers:", peers.length);
 			self.log("Mempool size:", scope.modules.transactionPool.getMempoolSize());
 
 	  });
@@ -613,6 +628,18 @@ function startInteractiveMode(scope){
 	    this.log(account[command]);
 			callback();
 	  });
+
+		vorpal
+		  .command('spv fix', 'fix database using SPV on all accounts')
+		  .action(function(args, callback) {
+				var self = this;
+				scope.modules.nodeManager.fixDatabase(function(err, results){
+					if(err) self.log(colors.red(err));
+					else self.log("Fixed "+results[3].length+" accounts");
+					callback();
+				});
+		  });
+
 	vorpal
 	  .command('spv <address>', 'Perform Simple Payment Verification against the blockchain')
 	  .action(function(args, callback) {

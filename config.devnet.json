@@ -1,7 +1,7 @@
 {
-  "port": 4000,
+  "port": 4002,
   "address": "0.0.0.0",
-  "version": "0.2.1",
+  "version": "1.1.0",
   "fileLogLevel": "info",
   "logFileName": "logs/ark.log",
   "consoleLogLevel": "debug",
@@ -9,7 +9,7 @@
   "db": {
     "host": "localhost",
     "port": 5432,
-    "database": "ark_test",
+    "database": "ark_devnet",
     "user": null,
     "password": "password",
     "poolSize": 20,
@@ -20,6 +20,7 @@
     ]
   },
   "api": {
+    "mount": true,
     "access": {
       "whiteList": []
     },
@@ -33,11 +34,27 @@
     }
   },
   "peers": {
-    "minimumNetworkReach": 1,
+    "minimumNetworkReach": 10,
     "list": [
       {
-        "ip": "127.0.0.1",
-        "port": 4000
+        "ip": "167.114.29.32",
+        "port": 4002
+      },
+      {
+        "ip": "167.114.29.33",
+        "port": 4002
+      },
+      {
+        "ip": "167.114.29.34",
+        "port": 4002
+      },
+      {
+        "ip": "167.114.29.35",
+        "port": 4002
+      },
+      {
+        "ip": "167.114.29.36",
+        "port": 4002
       }
     ],
     "blackList": [],
@@ -53,7 +70,7 @@
     }
   },
   "forging": {
-    "coldstart": 60,
+    "coldstart": 6,
     "force": true,
     "secret": [],
     "access": {
@@ -66,9 +83,6 @@
     "verifyOnLoading": false,
     "loadPerIteration": 5000
   },
-  "modules": {
-      "example":"./optional/example.js"
-  },
   "ssl": {
     "enabled": false,
     "options": {
@@ -78,5 +92,6 @@
       "cert": "./ssl/ark.crt"
     }
   },
-  "nethash": "31a3d2f549dcb0ce6856b5d440cb7a1402d766f290a89d408f155f937f106f8c"
+  "network": "devnet",
+  "nethash": "578e820911f24e039733b45e4882b73e301f813a0d2c31330dafda84534ffa23"
 }
