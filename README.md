@@ -1,16 +1,16 @@
-![ARK-NODE](https://i.imgur.com/ej8GvMn.png)
-Ark is a next generation crypto-currency and decentralized application platform, written entirely in JavaScript. For more information please refer to our website: https://ark.io/.
+![KAPU-NODE](https://github.com/kapucoin/kapu-node/blob/development/KAPU_NODE.jpg)
+Kapu is a next generation crypto-currency and decentralized application platform, written entirely in JavaScript. For more information please refer to our website: https://kapu.one/.
 
 This version is still beta, use at your own risks
 
 ## Install, Upgrade etc...
 You need to provision a linux (ubuntu tested) server (digital ocean, vultur or other).
 
-Then use the excellent ark-commander script
+Then use the excellent kapu-shell script
 ```
 cd
-wget https://ark.io/ARKcommander.sh
-bash ARKcommander.sh
+wget https://www.kapu.one/KAPUshell_mainnet.sh
+bash KAPUshell_mainnet.sh
 ```
 
 For developers, please read the "Developer Installation" section below.  
@@ -18,8 +18,8 @@ For developers, please read the "Developer Installation" section below.
 or Alternatively run
 ```
 cd
-wget https://ark.io/DARKcommander.sh
-bash DARKcommander.sh
+wget https://www.kapu.one/KAPUshell_devnet.sh
+bash KAPUshell_devnet.sh
 ```
 
 ## Details
@@ -63,7 +63,7 @@ To start the Vagrant environment:
 vagrant up
 ```
 
-All dependency installation and configuration for the dev environment is in the `VagrantFile`. After installation, ark-node will automatically start and log all output to the console.
+All dependency installation and configuration for the dev environment is in the `VagrantFile`. After installation, kapu-node will automatically start and log all output to the console.
 
 To log into the Vagrant environment:
 
@@ -94,7 +94,7 @@ Install PostgreSQL (min version: 9.5.2)
 ```
 sudo apt-get install -y postgresql postgresql-contrib
 sudo -u postgres createuser --createdb --password $USER
-createdb ark_test
+createdb kapu_devnet
 ```
 
 Install Node.js (tested with version 6.9.2, but any recent LTS release should do):
@@ -113,8 +113,8 @@ sudo npm install grunt-cli -g
 
 Clone this repository
 ```
-git clone https://github.com/arkecosystem/ark-node.git
-cd ark-node
+git clone -b development https://github.com/kapucoin/kapu-node.git
+cd kapu-node
 ```
 
 Install node modules:
@@ -124,21 +124,21 @@ npm install
 ```
 
 ## Launch
-To launch Ark on testnet:
+To launch KAPU on testnet:
 ```
-createdb ark_testnet
+createdb kapu_testnet
 npm run start:testnet
 ```
 
-To launch Ark on devtnet:
+To launch KAPU on devtnet:
 ```
-createdb ark_devnet
+createdb kapu_devnet
 npm run start:devnet
 ```
 
-To launch Ark on mainnet (when launched):
+To launch KAPU on mainnet (when launched):
 ```
-createdb ark_mainnet
+createdb kapu_mainnet
 npm run start:mainnet
 ```
 
@@ -169,7 +169,7 @@ Obviously you can hack away tasks/createGenesisBlock.js for your own custom use.
 
 You can the start with your own chain on a single node (all delegates will forge on your single node) using:
 ```
-createdb ark_newtest
+createdb kapu_newtest
 npm run start:newtest
 ```
 
@@ -177,7 +177,7 @@ Then you can distribute the config.json (without the delegates secrets inside, a
 
 
 ## Tests
-Load git submodule [ark-js](https://github.com/arkecosystem/ark-js):
+Load git submodule [kapu-js](https://github.com/gsilvestri/kapu-js):
 ```
 git submodule init
 git submodule update
@@ -220,6 +220,7 @@ peace vanish bleak box tuna woman rally manage undo royal lucky since
 
 The MIT License (MIT)
 
+Copyright (c) 2018 KAPU International Kft
 Copyright (c) 2016-2017 Ark
 Copyright (c) 2016 Lisk
 Copyright (c) 2014-2015 Crypti
