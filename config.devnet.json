@@ -1,7 +1,7 @@
 {
-  "port": 4002,
+  "port": 4100,
   "address": "0.0.0.0",
-  "version": "1.1.0",
+  "version": "0.0.1",
   "fileLogLevel": "info",
   "logFileName": "logs/kapu.log",
   "consoleLogLevel": "debug",
@@ -34,27 +34,27 @@
     }
   },
   "peers": {
-    "minimumNetworkReach": 10,
+    "minimumNetworkReach": 1,
     "list": [
       {
-        "ip": "167.114.29.32",
-        "port": 4002
+        "ip": "127.0.0.1",
+        "port": 4100
       },
       {
-        "ip": "167.114.29.33",
-        "port": 4002
+        "ip": "127.0.0.2",
+        "port": 4100
       },
       {
-        "ip": "167.114.29.34",
-        "port": 4002
+        "ip": "127.0.0.3",
+        "port": 4100
       },
       {
-        "ip": "167.114.29.35",
-        "port": 4002
+        "ip": "127.0.0.4",
+        "port": 4100
       },
       {
-        "ip": "167.114.29.36",
-        "port": 4002
+        "ip": "127.0.0.5",
+        "port": 4100
       }
     ],
     "blackList": [],
@@ -93,5 +93,5 @@
     }
   },
   "network": "devnet",
-  "nethash": "578e820911f24e039733b45e4882b73e301f813a0d2c31330dafda84534ffa23"
+  "nethash": "4410a5cb7aa63ac97f5295f9efced825b6609acd289b0b0efe4b3772e305ffee"
 }

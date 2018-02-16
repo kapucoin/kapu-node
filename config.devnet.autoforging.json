@@ -1,0 +1,149 @@
+{
+  "port": 4100,
+  "address": "0.0.0.0",
+  "version": "0.0.1",
+  "fileLogLevel": "info",
+  "logFileName": "logs/kapu.log",
+  "consoleLogLevel": "debug",
+  "trustProxy": false,
+  "db": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "kapu_devnet",
+    "user": null,
+    "password": "password",
+    "poolSize": 20,
+    "poolIdleTimeout": 30000,
+    "reapIntervalMillis": 1000,
+    "logEvents": [
+      "error"
+    ]
+  },
+  "api": {
+    "mount": true,
+    "access": {
+      "whiteList": []
+    },
+    "options": {
+      "limits": {
+        "max": 0,
+        "delayMs": 0,
+        "delayAfter": 0,
+        "windowMs": 60000
+      }
+    }
+  },
+  "peers": {
+    "minimumNetworkReach": 1,
+    "list": [
+      {
+        "ip": "127.0.0.1",
+        "port": 4100
+      },
+      {
+        "ip": "127.0.0.2",
+        "port": 4100
+      },
+      {
+        "ip": "127.0.0.3",
+        "port": 4100
+      },
+      {
+        "ip": "127.0.0.4",
+        "port": 4100
+      },
+      {
+        "ip": "127.0.0.5",
+        "port": 4100
+      }
+    ],
+    "blackList": [],
+    "options": {
+      "limits": {
+        "max": 0,
+        "delayMs": 0,
+        "delayAfter": 0,
+        "windowMs": 60000
+      },
+      "maxUpdatePeers": 20,
+      "timeout": 5000
+    }
+  },
+  "forging": {
+    "coldstart": 6,
+    "force": true,
+    "secret": [
+      "core math cute brisk present toilet gap recycle involve bicycle olive fun",
+      "custom phrase edit wool home limit have denial aware love shed domain",
+      "slice beach barely wine rate bubble rely early blouse damp dizzy toddler",
+      "quality report pill marble beyond panel client faculty swap degree dune simple",
+      "tuition unfair collect hour cupboard remove increase unique curtain bench hollow fantasy",
+      "quote invest decrease scheme beauty system then grocery old mimic area depend",
+      "culture demise reason world lion bless kind artefact impulse assist scorpion van",
+      "olympic twice mesh company heavy ritual leg nothing food able dumb empower",
+      "few boy lawsuit kind rigid summer crew lecture hobby eternal onion embark",
+      "outdoor gravity female loan festival sport notable surface scissors notice chair time",
+      "immense wrist bounce barely tide relax helmet alert judge jump eyebrow border",
+      "quarter diesel tomato degree stamp ginger relief diesel news blast wet clay",
+      "elbow elegant general party zebra setup vapor brain begin shallow judge soccer",
+      "flag veteran regret level make alien couple off object explain vapor tragic",
+      "manual cotton daughter thrive more bird tool remain coach option phone custom",
+      "remind stairs punch south embark problem other mobile must bean light kiss",
+      "setup arm find remember coconut repair mother upper meadow fragile thing monkey",
+      "pair sure hat engage huge cotton style balcony hint change soap fix",
+      "output essence pudding egg shell warfare drift siren trash symptom vicious paddle",
+      "actor shop often mountain home write whip vivid minor dwarf true satoshi",
+      "flip replace fan energy eyebrow bamboo panic whip secret desert pupil wire",
+      "search ordinary digital search leisure twenty until endorse desert use bonus warm",
+      "cancel idle glide same diet large return insane draw apart treat entire",
+      "because skin cup glove finger sphere pioneer loyal meadow merge woman dumb",
+      "cargo spy garden sure measure noble cube swim slight ten cradle victory",
+      "elevator shoulder way panic warm rival cook glow acid list attend jar",
+      "welcome hair cigar virus medal glue west indoor trick legend female chair",
+      "meadow staff fade faith pig champion speed torch raw burst panther earth",
+      "pulse glove corn giggle first struggle general because ripple lumber opera dice",
+      "elder tuition often tomorrow what finger february supply output river liar razor",
+      "april lunch arrive advance distance riot confirm mountain direct fossil imitate nut",
+      "energy narrow feel divert crowd dignity second cattle skull curtain knock dry",
+      "coral length forget gorilla boil just glare group album race fitness office",
+      "creek hurdle jaguar gold doctor shiver emotion purity road spend hold swear",
+      "fiber recall require chimney know goose addict lunar tackle stay doctor sketch",
+      "market grit rubber normal fatigue air enhance world siren purity hotel virus",
+      "pet still throw pretty prevent gallery sausage left work kite always when",
+      "earn eight extend accident index hero bacon material cash budget episode diesel",
+      "armor pair poem deal elbow ginger nuclear young scorpion crater corn zoo",
+      "tourist else spoil fiber fossil extend prevent call wisdom better onion various",
+      "practice later check collect decrease round race limb rare grit escape stuff",
+      "column super genuine print cherry assist extend keen obtain live spoil shift",
+      "reform protect isolate expire outdoor squeeze state list chuckle license exile wink",
+      "diary clay sell question ivory horn mother motor train core hobby display",
+      "burst vendor knife stomach funny buffalo tail seat return ostrich reason wire",
+      "park provide good icon just entire ostrich stage silk goose charge napkin",
+      "road firm file object emerge alley vault pride ride unlock day belt",
+      "regular first borrow ice ozone gadget glide jazz biology glance discover live",
+      "cool banana axis such treat curtain raw speed cool place urge involve",
+      "ship kick pulp december cabin jeans abuse news hole spider cradle design",
+      "come floor upgrade mystery annual century panther traffic ugly razor furnace amateur"
+    ],
+    "access": {
+      "whiteList": [
+        "127.0.0.1"
+      ]
+    }
+  },
+  "loading": {
+    "verifyOnLoading": false,
+    "loadPerIteration": 5000
+  },
+  "ssl": {
+    "enabled": false,
+    "options": {
+      "port": 443,
+      "address": "0.0.0.0",
+      "key": "./ssl/kapu.key",
+      "cert": "./ssl/kapu.crt"
+    }
+  },
+  "network": "devnet",
+  "nethash": "4410a5cb7aa63ac97f5295f9efced825b6609acd289b0b0efe4b3772e305ffee"
+}
