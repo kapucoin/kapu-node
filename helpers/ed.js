@@ -1,11 +1,11 @@
 'use strict';
 
-var arkjs = require('arkjs');
-var network = arkjs.networks.ark;
+var kapujs = require('kapujs');
+var network = kapujs.networks.kapu;
 var ed = {};
 
 ed.makeKeypair = function (seed) {
-	return arkjs.crypto.getKeys(seed);
+	return kapujs.crypto.getKeys(seed);
 };
 
 ed.sign = function (hash, keypair) {
@@ -14,8 +14,8 @@ ed.sign = function (hash, keypair) {
 
 ed.verify = function (hash, signatureBuffer, publicKeyBuffer) {
 	try {
-		var ecsignature = arkjs.ECSignature.fromDER(signatureBuffer);
-		var ecpair = arkjs.ECPair.fromPublicKeyBuffer(publicKeyBuffer, network);
+		var ecsignature = kapujs.ECSignature.fromDER(signatureBuffer);
+		var ecpair = kapujs.ECPair.fromPublicKeyBuffer(publicKeyBuffer, network);
 		return ecpair.verify(hash, ecsignature);
 	} catch (error){
 		return false;

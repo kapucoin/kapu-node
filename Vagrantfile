@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     ##########################################
 
     # Variables and arrays declarations
-    log="ark-install.log"
+    log="kapu-install.log"
 
     sudo apt-get update
     echo -e "Installing tools... "
@@ -47,7 +47,7 @@ Vagrant.configure("2") do |config|
         sudo ntpd -gq &>> $log
         sudo service ntp start &>> $log
         if ! sudo pgrep -x "ntpd" > /dev/null; then
-          echo -e "NTP failed to start! It should be installed and running for ARK.\n Check /etc/ntp.conf for any issues and correct them first! \n Exiting."
+          echo -e "NTP failed to start! It should be installed and running for KAPU.\n Check /etc/ntp.conf for any issues and correct them first! \n Exiting."
           exit 1
         fi
         echo -e "NTP was successfuly installed and started with PID:" `grep -x "ntpd"`
@@ -70,12 +70,12 @@ Vagrant.configure("2") do |config|
     # Creating DB and user
     sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD 'password';"
     #sudo -u postgres createuser --createdb --password $USER
-    sudo -u postgres createdb -O $USER ark_testnet
+    sudo -u postgres createdb -O $USER kapu_testnet
     sudo service postgresql start
 
-    git clone https://github.com/arkecosystem/ark-node.git
+    git clone -b development https://github.com/kapucoin/kapu-node.git
 
-    cd /home/vagrant/ark-node
+    cd /home/vagrant/kapu-node
     #rm -fr node_modules
     npm install grunt-cli
     npm install
@@ -85,7 +85,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     v.memory = 1024
     v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
-    v.name = "ark_node_vm"
+    v.name = "kapu_node_vm"
   end
 
   # Disable automatic box update checking. If you disable this, then

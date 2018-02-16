@@ -3,13 +3,13 @@
   "address": "0.0.0.0",
   "version": "1.1.0",
   "fileLogLevel": "info",
-  "logFileName": "logs/ark.log",
+  "logFileName": "logs/kapu.log",
   "consoleLogLevel": "debug",
   "trustProxy": false,
   "db": {
     "host": "localhost",
     "port": 5432,
-    "database": "ark_devnet",
+    "database": "kapu",
     "user": null,
     "password": "password",
     "poolSize": 20,
@@ -88,8 +88,8 @@
     "options": {
       "port": 443,
       "address": "0.0.0.0",
-      "key": "./ssl/ark.key",
-      "cert": "./ssl/ark.crt"
+      "key": "./ssl/kapu.key",
+      "cert": "./ssl/kapu.crt"
     }
   },
   "network": "devnet",

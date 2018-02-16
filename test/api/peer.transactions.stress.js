@@ -33,7 +33,7 @@ describe('POST /peer/transactions', function () {
 	// 			var bundled = [];
 	//
 	// 			for (var i = 0; i < 100; i++) {
-	// 				var transaction = node.ark.transaction.createTransaction(
+	// 				var transaction = node.kapu.transaction.createTransaction(
 	// 					node.randomAccount().address,
 	// 					node.randomNumber(100000000, 1000000000),
 	// 					"stress test",
@@ -78,7 +78,7 @@ describe('POST /peer/transactions', function () {
 
 		before(function (done) {
 			node.async.doUntil(function (next) {
-				var transaction = node.ark.transaction.createTransaction(
+				var transaction = node.kapu.transaction.createTransaction(
 					node.randomAccount().address,
 					node.randomNumber(100000000, 1000000000),
 					"stress test",

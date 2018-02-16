@@ -7,7 +7,7 @@ var checkIpInList = require('./helpers/checkIpInList.js');
 var extend = require('extend');
 var fs = require('fs');
 var genesisblock = require('./genesisBlock.json');
-var arkjs = require('arkjs');
+var kapujs = require('kapujs');
 var https = require('https');
 var Logger = require('./logger.js');
 var packageJson = require('./package.json');
@@ -103,7 +103,7 @@ if(appConfig.network){
 }
 
 else {
-	appConfig.network = networks.ark;
+	appConfig.network = networks.kapu;
 }
 
 if(appConfig.modules){
@@ -341,12 +341,12 @@ d.run(function () {
 			});
 
 			scope.network.server.listen(scope.config.port, scope.config.address, function (err) {
-				scope.logger.info('# Ark node server started on: ' + scope.config.address + ':' + scope.config.port);
+				scope.logger.info('# Kapu node server started on: ' + scope.config.address + ':' + scope.config.port);
 
 				if (!err) {
 					if (scope.config.ssl.enabled) {
 						scope.network.https.listen(scope.config.ssl.options.port, scope.config.ssl.options.address, function (err) {
-							scope.logger.info('Ark https started: ' + scope.config.ssl.options.address + ':' + scope.config.ssl.options.port);
+							scope.logger.info('Kapu https started: ' + scope.config.ssl.options.address + ':' + scope.config.ssl.options.port);
 
 							cb(err, scope.network);
 						});
@@ -603,8 +603,8 @@ function startInteractiveMode(scope){
 			var self = this;
 	    var passphrase = require("bip39").generateMnemonic();
 			self.log("Seed    - private:",passphrase);
-			self.log("WIF     - private:",require("arkjs").crypto.getKeys(passphrase).toWIF());
-			self.log("Address - public :",require("arkjs").crypto.getAddress(require("arkjs").crypto.getKeys(passphrase).publicKey));
+			self.log("WIF     - private:",require("kapujs").crypto.getKeys(passphrase).toWIF());
+			self.log("Address - public :",require("kapujs").crypto.getAddress(require("kapujs").crypto.getKeys(passphrase).publicKey));
 			callback();
 	  });
 	var account=null;
@@ -679,9 +679,9 @@ function startInteractiveMode(scope){
 
 	  });
 
-	vorpal.history('ark-node');
+	vorpal.history('kapu-node');
 
 	vorpal
-	  .delimiter('ark-node>')
+	  .delimiter('kapu-node>')
 	  .show();
 }

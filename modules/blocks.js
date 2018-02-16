@@ -1330,7 +1330,7 @@ Blocks.prototype.processBlock = function (block, cb) {
 					} else {
 						// The block and the transactions are OK i.e:
 						// * Block and transactions have valid values (signatures, block slots, etc...)
-						// * The check against database state passed (for instance sender has enough ARK, votes are under 101, etc...)
+						// * The check against database state passed (for instance sender has enough KAPU, votes are under 101, etc...)
 						// We thus update the database with the transactions values, save the block and tick it.
 						async.waterfall([
 							function(waterfallCb){

@@ -596,7 +596,7 @@ Loader.prototype.rebuildBalance = function(cb){
 		function(seriesCb){
 			library.db.query(publicKeysSQL).then(function(pks){
 				pks.forEach(function(pk){
-					accounts[arkjs.crypto.getAddress(address)].publicKey = pk;
+					accounts[kapujs.crypto.getAddress(address)].publicKey = pk;
 				});
 				return seriesCb();
 			}).catch(seriesCb);

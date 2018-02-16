@@ -2,7 +2,7 @@
 
 var slots = require('../helpers/slots.js');
 var crypto = require('crypto');
-var arkjs = require('arkjs');
+var kapujs = require('kapujs');
 var bignum = require('../helpers/bignum.js');
 var ByteBuffer = require('bytebuffer');
 var BlockReward = require('../logic/blockReward.js');
@@ -22,7 +22,7 @@ function Block (scope, cb) {
 __private.blockReward = new BlockReward();
 
 __private.getAddressByPublicKey = function (publicKey, network) {
-	return arkjs.crypto.getAddress(publicKey, network.pubKeyHash);
+	return kapujs.crypto.getAddress(publicKey, network.pubKeyHash);
 };
 
 // Public methods

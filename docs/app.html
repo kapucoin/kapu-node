@@ -82,6 +82,11 @@
                 </a>
               
                 
+                <a class="source" href="server.html">
+                  server.js
+                </a>
+              
+                
                 <a class="source" href="signatures.html">
                   signatures.js
                 </a>
@@ -128,11 +133,13 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;
 
 <span class="hljs-keyword">var</span> appConfig = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./config.json'</span>);
+<span class="hljs-keyword">var</span> networks = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./networks.json'</span>);
 <span class="hljs-keyword">var</span> <span class="hljs-keyword">async</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'async'</span>);
 <span class="hljs-keyword">var</span> checkIpInList = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./helpers/checkIpInList.js'</span>);
 <span class="hljs-keyword">var</span> extend = <span class="hljs-built_in">require</span>(<span class="hljs-string">'extend'</span>);
 <span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
 <span class="hljs-keyword">var</span> genesisblock = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./genesisBlock.json'</span>);
+<span class="hljs-keyword">var</span> kapujs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'kapujs'</span>);
 <span class="hljs-keyword">var</span> https = <span class="hljs-built_in">require</span>(<span class="hljs-string">'https'</span>);
 <span class="hljs-keyword">var</span> Logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./logger.js'</span>);
 <span class="hljs-keyword">var</span> packageJson = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./package.json'</span>);
@@ -149,16 +156,11 @@ process.stdin.resume();
 
 <span class="hljs-keyword">var</span> versionBuild = fs.readFileSync(path.join(__dirname, <span class="hljs-string">'build'</span>), <span class="hljs-string">'utf8'</span>);
 
-<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> gc !== <span class="hljs-string">'undefined'</span>) {
-	setInterval(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-		gc();
-	}, <span class="hljs-number">60000</span>);
-}
-
 program
 	.version(packageJson.version)
 	.option(<span class="hljs-string">'-c, --config &lt;path&gt;'</span>, <span class="hljs-string">'config file path'</span>)
 	.option(<span class="hljs-string">'-g, --genesis &lt;path&gt;'</span>, <span class="hljs-string">'genesis block'</span>)
+	.option(<span class="hljs-string">'-n, --networks &lt;path&gt;'</span>, <span class="hljs-string">'networks definition file'</span>)
 	.option(<span class="hljs-string">'-p, --port &lt;port&gt;'</span>, <span class="hljs-string">'listening port number'</span>)
 	.option(<span class="hljs-string">'-a, --address &lt;ip&gt;'</span>, <span class="hljs-string">'listening host name or ip'</span>)
 	.option(<span class="hljs-string">'-x, --peers [peers...]'</span>, <span class="hljs-string">'peers list'</span>)
@@ -172,6 +174,10 @@ program
 
 <span class="hljs-keyword">if</span> (program.genesis) {
 	genesisblock = <span class="hljs-built_in">require</span>(path.resolve(process.cwd(), program.genesis));
+}
+
+<span class="hljs-keyword">if</span> (program.networks) {
+	networks = <span class="hljs-built_in">require</span>(path.resolve(process.cwd(), program.networks));
 }
 
 <span class="hljs-keyword">if</span> (program.port) {
@@ -223,6 +229,14 @@ program
 		<span class="hljs-attr">nodeManager</span>: <span class="hljs-string">'./modules/nodeManager.js'</span>
 	}
 };
+
+<span class="hljs-keyword">if</span>(appConfig.network){
+	appConfig.network = networks[appConfig.network];
+}
+
+<span class="hljs-keyword">else</span> {
+	appConfig.network = networks.kapu;
+}
 
 <span class="hljs-keyword">if</span>(appConfig.modules){
 	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> name <span class="hljs-keyword">in</span> appConfig.modules){
@@ -279,7 +293,8 @@ d.run(<span class="hljs-function"><span class="hljs-keyword">function</span> (<s
 		},
 
 		<span class="hljs-attr">schema</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
-			cb(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> z_schema());
+			<span class="hljs-keyword">var</span> schema = <span class="hljs-keyword">new</span> z_schema(appConfig.network).z_schema
+			cb(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> schema());
 		},
 
 		<span class="hljs-attr">network</span>: [<span class="hljs-string">'config'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
@@ -556,12 +571,12 @@ To balance transaction application (unconfirmed and confirmed)</p>
 			});
 
 			scope.network.server.listen(scope.config.port, scope.config.address, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
-				scope.logger.info(<span class="hljs-string">'# Ark node server started on: '</span> + scope.config.address + <span class="hljs-string">':'</span> + scope.config.port);
+				scope.logger.info(<span class="hljs-string">'# Kapu node server started on: '</span> + scope.config.address + <span class="hljs-string">':'</span> + scope.config.port);
 
 				<span class="hljs-keyword">if</span> (!err) {
 					<span class="hljs-keyword">if</span> (scope.config.ssl.enabled) {
 						scope.network.https.listen(scope.config.ssl.options.port, scope.config.ssl.options.address, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
-							scope.logger.info(<span class="hljs-string">'Ark https started: '</span> + scope.config.ssl.options.address + <span class="hljs-string">':'</span> + scope.config.ssl.options.port);
+							scope.logger.info(<span class="hljs-string">'Kapu https started: '</span> + scope.config.ssl.options.address + <span class="hljs-string">':'</span> + scope.config.ssl.options.port);
 
 							cb(err, scope.network);
 						});
@@ -579,11 +594,12 @@ To balance transaction application (unconfirmed and confirmed)</p>
 
 		}],
 
-		<span class="hljs-attr">ed</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
-			cb(<span class="hljs-literal">null</span>, <span class="hljs-built_in">require</span>(<span class="hljs-string">'./helpers/ed.js'</span>));
-		},
+		<span class="hljs-attr">crypto</span>: [<span class="hljs-string">'config'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
+			<span class="hljs-keyword">var</span> crypto = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./helpers/crypto.js'</span>)
+			cb(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> crypto(scope));
+		}],
 
-		<span class="hljs-attr">bus</span>: [<span class="hljs-string">'ed'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
+		<span class="hljs-attr">bus</span>: [<span class="hljs-string">'crypto'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
 			<span class="hljs-keyword">var</span> changeCase = <span class="hljs-built_in">require</span>(<span class="hljs-string">'change-case'</span>);
 			<span class="hljs-keyword">var</span> bus = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
 				<span class="hljs-keyword">this</span>.message = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
@@ -618,7 +634,7 @@ To balance transaction application (unconfirmed and confirmed)</p>
 				<span class="hljs-attr">db</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
 					cb(<span class="hljs-literal">null</span>, scope.db);
 				},
-				<span class="hljs-attr">ed</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
+				<span class="hljs-attr">crypto</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
 					cb(<span class="hljs-literal">null</span>, scope.crypto);
 				},
 				<span class="hljs-attr">logger</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
@@ -632,13 +648,13 @@ To balance transaction application (unconfirmed and confirmed)</p>
 						<span class="hljs-attr">block</span>: genesisblock
 					});
 				},
-				<span class="hljs-attr">account</span>: [<span class="hljs-string">'db'</span>, <span class="hljs-string">'bus'</span>, <span class="hljs-string">'ed'</span>, <span class="hljs-string">'schema'</span>, <span class="hljs-string">'genesisblock'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
+				<span class="hljs-attr">account</span>: [<span class="hljs-string">'db'</span>, <span class="hljs-string">'bus'</span>, <span class="hljs-string">'crypto'</span>, <span class="hljs-string">'schema'</span>, <span class="hljs-string">'genesisblock'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
 					<span class="hljs-keyword">new</span> Account(scope, cb);
 				}],
-				<span class="hljs-attr">transaction</span>: [<span class="hljs-string">'db'</span>, <span class="hljs-string">'bus'</span>, <span class="hljs-string">'ed'</span>, <span class="hljs-string">'schema'</span>, <span class="hljs-string">'genesisblock'</span>, <span class="hljs-string">'account'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
+				<span class="hljs-attr">transaction</span>: [<span class="hljs-string">'db'</span>, <span class="hljs-string">'bus'</span>, <span class="hljs-string">'crypto'</span>, <span class="hljs-string">'schema'</span>, <span class="hljs-string">'genesisblock'</span>, <span class="hljs-string">'account'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
 					<span class="hljs-keyword">new</span> Transaction(scope, cb);
 				}],
-				<span class="hljs-attr">block</span>: [<span class="hljs-string">'db'</span>, <span class="hljs-string">'bus'</span>, <span class="hljs-string">'ed'</span>, <span class="hljs-string">'schema'</span>, <span class="hljs-string">'genesisblock'</span>, <span class="hljs-string">'account'</span>, <span class="hljs-string">'transaction'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
+				<span class="hljs-attr">block</span>: [<span class="hljs-string">'db'</span>, <span class="hljs-string">'bus'</span>, <span class="hljs-string">'crypto'</span>, <span class="hljs-string">'schema'</span>, <span class="hljs-string">'genesisblock'</span>, <span class="hljs-string">'account'</span>, <span class="hljs-string">'transaction'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope, cb</span>) </span>{
 					<span class="hljs-keyword">new</span> Block(scope, cb);
 				}]
 			}, cb);
@@ -675,7 +691,7 @@ To balance transaction application (unconfirmed and confirmed)</p>
 		}]
 	}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, scope</span>) </span>{
 		<span class="hljs-keyword">if</span> (err) {
-			logger.fatal(err);
+			scope.logger.fatal(err);
 		} <span class="hljs-keyword">else</span> {
 
 			scope.logger.info(<span class="hljs-string">'Modules ready and launched'</span>);
@@ -759,9 +775,8 @@ process.on(<span class="hljs-string">'uncaughtException'</span>, <span class="hl
 			});
 			self.log(<span class="hljs-string">"Forging:"</span>, scope.modules.delegates.isForging());
 			self.log(<span class="hljs-string">"Active Delegate:"</span>, scope.modules.delegates.isActiveDelegate());
-			scope.modules.peers.list(<span class="hljs-literal">null</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, peers</span>)</span>{
-				self.log(<span class="hljs-string">"Connected Peers:"</span>, peers.length);
-			});
+			<span class="hljs-keyword">var</span> peers = scope.modules.peers.listBroadcastPeers();
+			self.log(<span class="hljs-string">"Connected Peers:"</span>, peers.length);
 			self.log(<span class="hljs-string">"Mempool size:"</span>, scope.modules.transactionPool.getMempoolSize());
 
 	  });
@@ -833,8 +848,8 @@ process.on(<span class="hljs-string">'uncaughtException'</span>, <span class="hl
 			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
 	    <span class="hljs-keyword">var</span> passphrase = <span class="hljs-built_in">require</span>(<span class="hljs-string">"bip39"</span>).generateMnemonic();
 			self.log(<span class="hljs-string">"Seed    - private:"</span>,passphrase);
-			self.log(<span class="hljs-string">"WIF     - private:"</span>,<span class="hljs-built_in">require</span>(<span class="hljs-string">"arkjs"</span>).crypto.getKeys(passphrase).toWIF());
-			self.log(<span class="hljs-string">"Address - public :"</span>,<span class="hljs-built_in">require</span>(<span class="hljs-string">"arkjs"</span>).crypto.getAddress(<span class="hljs-built_in">require</span>(<span class="hljs-string">"arkjs"</span>).crypto.getKeys(passphrase).publicKey));
+			self.log(<span class="hljs-string">"WIF     - private:"</span>,<span class="hljs-built_in">require</span>(<span class="hljs-string">"kapujs"</span>).crypto.getKeys(passphrase).toWIF());
+			self.log(<span class="hljs-string">"Address - public :"</span>,<span class="hljs-built_in">require</span>(<span class="hljs-string">"kapujs"</span>).crypto.getAddress(<span class="hljs-built_in">require</span>(<span class="hljs-string">"kapujs"</span>).crypto.getKeys(passphrase).publicKey));
 			callback();
 	  });
 	<span class="hljs-keyword">var</span> account=<span class="hljs-literal">null</span>;
@@ -858,6 +873,18 @@ process.on(<span class="hljs-string">'uncaughtException'</span>, <span class="hl
 	    <span class="hljs-keyword">this</span>.log(account[command]);
 			callback();
 	  });
+
+		vorpal
+		  .command(<span class="hljs-string">'spv fix'</span>, <span class="hljs-string">'fix database using SPV on all accounts'</span>)
+		  .action(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">args, callback</span>) </span>{
+				<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+				scope.modules.nodeManager.fixDatabase(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, results</span>)</span>{
+					<span class="hljs-keyword">if</span>(err) self.log(colors.red(err));
+					<span class="hljs-keyword">else</span> self.log(<span class="hljs-string">"Fixed "</span>+results[<span class="hljs-number">3</span>].length+<span class="hljs-string">" accounts"</span>);
+					callback();
+				});
+		  });
+
 	vorpal
 	  .command(<span class="hljs-string">'spv &lt;address&gt;'</span>, <span class="hljs-string">'Perform Simple Payment Verification against the blockchain'</span>)
 	  .action(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">args, callback</span>) </span>{
@@ -897,10 +924,10 @@ process.on(<span class="hljs-string">'uncaughtException'</span>, <span class="hl
 
 	  });
 
-	vorpal.history(<span class="hljs-string">'ark-node'</span>);
+	vorpal.history(<span class="hljs-string">'kapu-node'</span>);
 
 	vorpal
-	  .delimiter(<span class="hljs-string">'ark-node&gt;'</span>)
+	  .delimiter(<span class="hljs-string">'kapu-node&gt;'</span>)
 	  .show();
 }</pre></div></div>
             

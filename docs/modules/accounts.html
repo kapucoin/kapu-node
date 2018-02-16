@@ -5,7 +5,7 @@
   <title>accounts.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-  <link rel="stylesheet" media="all" href="arkio.css" />
+  <link rel="stylesheet" media="all" href="../arkio.css" />
 </head>
 <body>
   
@@ -79,6 +79,11 @@
                 
                 <a class="source" href="rounds.html">
                   rounds.js
+                </a>
+              
+                
+                <a class="source" href="server.html">
+                  server.js
                 </a>
               
                 
@@ -301,7 +306,7 @@ __private.blockReward = <span class="hljs-keyword">new</span> BlockReward();</pr
             </div>
             
             <div class="content"><div class='highlight'><pre>Accounts.prototype.generateAddressByPublicKey = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">publicKey</span>) </span>{
-	<span class="hljs-keyword">return</span> kapujs.crypto.getAddress(publicKey);
+	<span class="hljs-keyword">return</span> kapujs.crypto.getAddress(publicKey, library.config.network.pubKeyHash);
 };</pre></div></div>
             
         </li>

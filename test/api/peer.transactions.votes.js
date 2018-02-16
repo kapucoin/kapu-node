@@ -39,7 +39,7 @@ function postVotes (params, done) {
 			});
 		}, function (err) {
 			async.eachSeries(params.delegates, function (delegate, eachCb) {
-				var transaction = node.ark.vote.createVote(params.passphrase, [params.action + delegate]);
+				var transaction = node.kapu.vote.createVote(params.passphrase, [params.action + delegate]);
 
 				postVote(transaction, function (err, res) {
 					params.voteCb(err, res);
@@ -71,7 +71,7 @@ function sendArk (params, done) {
 
 function registerDelegate (account, done) {
 	account.username = node.randomDelegateName().toLowerCase();
-	var transaction = node.ark.delegate.createDelegate(account.password, account.username);
+	var transaction = node.kapu.delegate.createDelegate(account.password, account.username);
 
 	node.post('/peer/transactions', { transactions: [transaction] }, function (err, res) {
 		node.expect(res.body).to.have.property('success').to.be.ok;
@@ -133,7 +133,7 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using undefined transaction.asset', function (done) {
-		var transaction = node.ark.vote.createVote(account.password, ['+' + delegate]);
+		var transaction = node.kapu.vote.createVote(account.password, ['+' + delegate]);
 
 		delete transaction.asset;
 
@@ -146,11 +146,11 @@ describe('POST /peer/transactions', function () {
 
 	it('voting for a delegate and then removing again within same block should fail', function (done) {
 		node.onNewBlock(function (err) {
-			var transaction = node.ark.vote.createVote(account.password, ['+' + delegate]);
+			var transaction = node.kapu.vote.createVote(account.password, ['+' + delegate]);
 			postVote(transaction, function (err, res) {
 				node.expect(res.body).to.have.property('success').to.be.ok;
 
-				var transaction2 = node.ark.vote.createVote(account.password, ['-' + delegate]);
+				var transaction2 = node.kapu.vote.createVote(account.password, ['-' + delegate]);
 				postVote(transaction2, function (err, res) {
 					node.expect(res.body).to.have.property('success').to.be.not.ok;
 					done();
@@ -161,11 +161,11 @@ describe('POST /peer/transactions', function () {
 
 	it('removing votes from a delegate and then voting again within same block should fail', function (done) {
 		node.onNewBlock(function (err) {
-			var transaction = node.ark.vote.createVote(account.password, ['-' + delegate]);
+			var transaction = node.kapu.vote.createVote(account.password, ['-' + delegate]);
 			postVote(transaction, function (err, res) {
 				node.expect(res.body).to.have.property('success').to.be.ok;
 
-				var transaction2 = node.ark.vote.createVote(account.password, ['+' + delegate]);
+				var transaction2 = node.kapu.vote.createVote(account.password, ['+' + delegate]);
 				postVote(transaction2, function (err, res) {
 					node.expect(res.body).to.have.property('success').to.be.not.ok;
 					done();
@@ -178,7 +178,7 @@ describe('POST /peer/transactions', function () {
 		async.series([
 			function (seriesCb) {
 				node.onNewBlock(function (err) {
-					var transaction = node.ark.vote.createVote(account.password, ['+' + delegate]);
+					var transaction = node.kapu.vote.createVote(account.password, ['+' + delegate]);
 					postVote(transaction, function (err, res) {
 						node.expect(res.body).to.have.property('success').to.be.ok;
 						done();
@@ -187,7 +187,7 @@ describe('POST /peer/transactions', function () {
 			},
 			function (seriesCb) {
 				node.onNewBlock(function (err) {
-					var transaction2 = node.ark.vote.createVote(account.password, ['+' + delegate]);
+					var transaction2 = node.kapu.vote.createVote(account.password, ['+' + delegate]);
 					postVote(transaction2, function (err, res) {
 						node.expect(res.body).to.have.property('success').to.be.not.ok;
 						done();
@@ -201,7 +201,7 @@ describe('POST /peer/transactions', function () {
 
 	it('removing votes from a delegate should be ok', function (done) {
 		node.onNewBlock(function (err) {
-			var transaction = node.ark.vote.createVote(account.password, ['-' + delegate]);
+			var transaction = node.kapu.vote.createVote(account.password, ['-' + delegate]);
 			postVote(transaction, function (err, res) {
 				node.expect(res.body).to.have.property('success').to.be.ok;
 				node.expect(res.body).to.have.property('transactionIds');
@@ -213,7 +213,7 @@ describe('POST /peer/transactions', function () {
 
 	it('voting for 33 delegates at once should be ok', function (done) {
 		node.onNewBlock(function (err) {
-			var transaction = node.ark.vote.createVote(account.password, delegates.slice(0, 33).map(function (delegate) {
+			var transaction = node.kapu.vote.createVote(account.password, delegates.slice(0, 33).map(function (delegate) {
 				return '+' + delegate;
 			}));
 
@@ -228,7 +228,7 @@ describe('POST /peer/transactions', function () {
 
 	it('removing votes from 33 delegates at once should be ok', function (done) {
 		node.onNewBlock(function (err) {
-			var transaction = node.ark.vote.createVote(account.password, delegates.slice(0, 33).map(function (delegate) {
+			var transaction = node.kapu.vote.createVote(account.password, delegates.slice(0, 33).map(function (delegate) {
 				return '-' + delegate;
 			}));
 
@@ -243,7 +243,7 @@ describe('POST /peer/transactions', function () {
 
 	it('voting for 34 delegates at once should fail', function (done) {
 		node.onNewBlock(function (err) {
-			var transaction = node.ark.vote.createVote(account.password, delegates.slice(0, 34).map(function (delegate) {
+			var transaction = node.kapu.vote.createVote(account.password, delegates.slice(0, 34).map(function (delegate) {
 				return '+' + delegate;
 			}));
 
@@ -271,7 +271,7 @@ describe('POST /peer/transactions', function () {
 
 	it('removing votes from 2 delegates at once should fail', function (done) {
 		node.onNewBlock(function (err) {
-			var transaction = node.ark.vote.createVote(account.password, delegates.slice(0, 2).map(function (delegate) {
+			var transaction = node.kapu.vote.createVote(account.password, delegates.slice(0, 2).map(function (delegate) {
 				return '-' + delegate;
 			}));
 
@@ -321,7 +321,7 @@ describe('POST /peer/transactions after registering a new delegate', function ()
 	});
 
 	it('voting for self should be ok', function (done) {
-		var transaction = node.ark.vote.createVote(account.password, ['+' + account.publicKey]);
+		var transaction = node.kapu.vote.createVote(account.password, ['+' + account.publicKey]);
 
 		postVote(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.ok;
@@ -352,7 +352,7 @@ describe('POST /peer/transactions after registering a new delegate', function ()
 				var slicedDelegates = delegates.slice(-25);
 				node.expect(slicedDelegates).to.have.lengthOf(25);
 
-				var transaction = node.ark.vote.createVote(account.password, slicedDelegates.map(function (delegate) {
+				var transaction = node.kapu.vote.createVote(account.password, slicedDelegates.map(function (delegate) {
 					return '+' + delegate;
 				}));
 
@@ -368,7 +368,7 @@ describe('POST /peer/transactions after registering a new delegate', function ()
 	});
 
 	it('removing vote from self should be ok', function (done) {
-		var transaction = node.ark.vote.createVote(account.password, ['-' + account.publicKey]);
+		var transaction = node.kapu.vote.createVote(account.password, ['-' + account.publicKey]);
 
 		postVote(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.ok;

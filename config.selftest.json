@@ -3,13 +3,13 @@
     "address": "0.0.0.0",
     "version": "0.2.1",
     "fileLogLevel": "info",
-    "logFileName": "logs/ark.log",
+    "logFileName": "logs/kapu.log",
     "consoleLogLevel": "debug",
     "trustProxy": false,
     "db": {
         "host": "localhost",
         "port": 5432,
-        "database": "ark_test",
+        "database": "kapu_test",
         "user": null,
         "password": "password",
         "poolSize": 20,
@@ -168,8 +168,8 @@
         "options": {
             "port": 443,
             "address": "0.0.0.0",
-            "key": "./ssl/ark.key",
-            "cert": "./ssl/ark.crt"
+            "key": "./ssl/kapu.key",
+            "cert": "./ssl/kapu.crt"
         }
     },
     "nethash":"198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d"

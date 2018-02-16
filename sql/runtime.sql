@@ -1,4 +1,4 @@
-/* Ark Runtime
+/* KAPU Runtime
  *
  */
 

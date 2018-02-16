@@ -4,7 +4,7 @@ var bignum = require('../helpers/bignum.js');
 var BlockReward = require('../logic/blockReward.js');
 var constants = require('../helpers/constants.js');
 var crypto = require('crypto');
-var arkjs = require('arkjs');
+var kapujs = require('kapujs');
 var extend = require('extend');
 var Router = require('../helpers/router.js');
 var schema = require('../schema/accounts.js');
@@ -107,7 +107,7 @@ __private.attachApi = function () {
 
 //
 Accounts.prototype.generateAddressByPublicKey = function (publicKey) {
-	return arkjs.crypto.getAddress(publicKey, library.config.network.pubKeyHash);
+	return kapujs.crypto.getAddress(publicKey, library.config.network.pubKeyHash);
 };
 
 //

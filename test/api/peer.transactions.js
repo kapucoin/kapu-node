@@ -25,7 +25,7 @@ describe('GET /peer/transactions', function () {
 	var memtx;
 
 	it('using vendorField should be ok', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, "this is a test vendorfield", node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, "this is a test vendorfield", node.gAccount.password);
 		memtx=transaction;
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.ok;
@@ -81,7 +81,7 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using valid headers should be ok', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
 
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.ok;
@@ -92,7 +92,7 @@ describe('POST /peer/transactions', function () {
 	});
 
 	// it('using already processed transaction should be not ok (preventing spam)', function (done) {
-	// 	var transaction = node.ark.transaction.createTransaction(testaccount.address, 2, null, node.gAccount.password);
+	// 	var transaction = node.kapu.transaction.createTransaction(testaccount.address, 2, null, node.gAccount.password);
 	//
 	// 	postTransaction(transaction, function (err, res) {
 	// 		node.expect(res.body).to.have.property('success').to.be.ok;
@@ -107,7 +107,7 @@ describe('POST /peer/transactions', function () {
 	// });
 
 	it('using already confirmed transaction should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 3, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 3, null, node.gAccount.password);
 
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.ok;
@@ -128,11 +128,11 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using fees too low should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
 		transaction.fee = 5000000;
 		delete transaction.signature;
-		node.ark.crypto.sign(transaction, node.ark.crypto.getKeys(node.gAccount.password));
-		transaction.id = node.ark.crypto.getId(transaction);
+		node.kapu.crypto.sign(transaction, node.kapu.crypto.getKeys(node.gAccount.password));
+		transaction.id = node.kapu.crypto.getId(transaction);
 
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.not.ok;
@@ -143,11 +143,11 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using fees too high should be ok', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
 		transaction.fee = 50000000;
 		delete transaction.signature;
-		node.ark.crypto.sign(transaction, node.ark.crypto.getKeys(node.gAccount.password));
-		transaction.id = node.ark.crypto.getId(transaction);
+		node.kapu.crypto.sign(transaction, node.kapu.crypto.getKeys(node.gAccount.password));
+		transaction.id = node.kapu.crypto.getId(transaction);
 
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.ok;
@@ -158,7 +158,7 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using transaction with negative amount should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, -1, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, -1, null, node.gAccount.password);
 
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.not.ok;
@@ -168,8 +168,8 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('tampering with recipient should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
-		transaction.id = node.ark.crypto.getId(transaction);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
+		transaction.id = node.kapu.crypto.getId(transaction);
 		transaction.recipientId = 'Ab5zZfCC7ig3kS83VhsQscEeZLj12qLfGW';
 
 		postTransaction(transaction, function (err, res) {
@@ -180,18 +180,18 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('when sender has no funds should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, 'randomstring');
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, 'randomstring');
 
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.not.ok;
-			node.expect(res.body).to.have.property('error').to.match(/Account does not have enough ARK: [a-zA-Z0-9]+ balance: 0/);
+			node.expect(res.body).to.have.property('error').to.match(/Account does not have enough KAPU: [a-zA-Z0-9]+ balance: 0/);
 			done();
 		});
 	});
 
 	it('when sender does not have enough funds should always fail', function (done) {
 		var account = node.randomAccount();
-		var transaction = node.ark.transaction.createTransaction(account.address, 1, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(account.address, 1, null, node.gAccount.password);
 
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.ok;
@@ -200,12 +200,12 @@ describe('POST /peer/transactions', function () {
 
 			node.onNewBlock(function () {
 				var count = 1;
-				var transaction2 = node.ark.transaction.createTransaction(node.gAccount.address, 2, null, account.password);
+				var transaction2 = node.kapu.transaction.createTransaction(node.gAccount.address, 2, null, account.password);
 
 				node.async.doUntil(function (next) {
 					postTransaction(transaction2, function (err, res) {
 						node.expect(res.body).to.have.property('success').to.be.not.ok;
-						node.expect(res.body).to.have.property('error').to.match(/Account does not have enough ARK: [a-zA-Z0-9]+ balance: 1e-8/);
+						node.expect(res.body).to.have.property('error').to.match(/Account does not have enough KAPU: [a-zA-Z0-9]+ balance: 1e-8/);
 						count++;
 						return next();
 					});
@@ -219,9 +219,9 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using fake signature should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
 		transaction.signature = crypto.randomBytes(64).toString('hex');
-		transaction.id = node.ark.crypto.getId(transaction);
+		transaction.id = node.kapu.crypto.getId(transaction);
 
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.not.ok;
@@ -231,7 +231,7 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using invalid publicKey should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
 		transaction.senderPublicKey = node.randomPassword();
 		node.debug('> Tx:'.grey, JSON.stringify(transaction));
 		postTransaction(transaction, function (err, res) {
@@ -243,7 +243,7 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using invalid signature should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password);
 		transaction.signature = node.randomPassword();
 
 		postTransaction(transaction, function (err, res) {
@@ -254,7 +254,7 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using very large amount and genesis block id should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 100000000000000000, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 100000000000000000, null, node.gAccount.password);
 		transaction.blockId = genesisblock.id;
 
 		postTransaction(transaction, function (err, res) {
@@ -265,7 +265,7 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using overflown amount should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 184819291270000000012910218291201281920128129, null,
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 184819291270000000012910218291201281920128129, null,
 		node.gAccount.password);
 
 		postTransaction(transaction, function (err, res) {
@@ -276,7 +276,7 @@ describe('POST /peer/transactions', function () {
 	});
 
 	it('using float amount should fail', function (done) {
-		var transaction = node.ark.transaction.createTransaction(testaccount.address, 1.3, null, node.gAccount.password);
+		var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1.3, null, node.gAccount.password);
 
 		postTransaction(transaction, function (err, res) {
 			node.expect(res.body).to.have.property('success').to.be.not.ok;

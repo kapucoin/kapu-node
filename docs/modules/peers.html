@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>peers.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../arkio.css" />
+</head>
+<body>
+  
+    <div id="title">
+         <h1>peers.js</h1>
+         <img src="https://ark.io/wp-content/uploads/2016/10/ark-normal.png">
+        <hr>
+    </div>
+  
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="README.html">
+                  README.md
+                </a>
+              
+                
+                <a class="source" href="app.html">
+                  app.js
+                </a>
+              
+                
+                <a class="source" href="accounts.html">
+                  accounts.js
+                </a>
+              
+                
+                <a class="source" href="blockchain.html">
+                  blockchain.js
+                </a>
+              
+                
+                <a class="source" href="blocks.html">
+                  blocks.js
+                </a>
+              
+                
+                <a class="source" href="delegates.html">
+                  delegates.js
+                </a>
+              
+                
+                <a class="source" href="loader.html">
+                  loader.js
+                </a>
+              
+                
+                <a class="source" href="multisignatures.html">
+                  multisignatures.js
+                </a>
+              
+                
+                <a class="source" href="nodeManager.html">
+                  nodeManager.js
+                </a>
+              
+                
+                <a class="source" href="peers.html">
+                  peers.js
+                </a>
+              
+                
+                <a class="source" href="rounds.html">
+                  rounds.js
+                </a>
+              
+                
+                <a class="source" href="server.html">
+                  server.js
+                </a>
+              
+                
+                <a class="source" href="signatures.html">
+                  signatures.js
+                </a>
+              
+                
+                <a class="source" href="system.html">
+                  system.js
+                </a>
+              
+                
+                <a class="source" href="transactionPool.html">
+                  transactionPool.js
+                </a>
+              
+                
+                <a class="source" href="transactions.html">
+                  transactions.js
+                </a>
+              
+                
+                <a class="source" href="transport.html">
+                  transport.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        <li id="section-1">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>;
+
+<span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>);
+<span class="hljs-keyword">var</span> <span class="hljs-keyword">async</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">'async'</span>);
+<span class="hljs-keyword">var</span> extend = <span class="hljs-built_in">require</span>(<span class="hljs-string">'extend'</span>);
+<span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
+<span class="hljs-keyword">var</span> ip = <span class="hljs-built_in">require</span>(<span class="hljs-string">'ip'</span>);
+<span class="hljs-keyword">var</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);
+<span class="hljs-keyword">var</span> Router = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../helpers/router.js'</span>);
+<span class="hljs-keyword">var</span> Peer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../logic/peer.js'</span>);
+<span class="hljs-keyword">var</span> schema = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../schema/peers.js'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Private fields</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> modules, library, self, shared = {};
+
+<span class="hljs-keyword">var</span> __private = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>prevents from looking too much around at coldstart</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	lastPeersUpdate: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().getTime(),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>not banning at the start of nodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	coldstart: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().getTime(),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>hold the Peer list
+By default one peer by IP is accepted.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	peers: {},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>headers to send to peers</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	headers: {}
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Constructor</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Peers</span> (<span class="hljs-params">cb, scope</span>) </span>{
+	library = scope;
+	self = <span class="hljs-keyword">this</span>;
+
+	<span class="hljs-keyword">return</span> cb(<span class="hljs-literal">null</span>, self);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+          
+            <div class="fullblock">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Public methods</p>
+<p><strong>API</strong> <code>inspect</code></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Return a Peer object, trying to sort out with lite clients
+By default one Peer by IP is accepted.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Peers.prototype.accept = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">peer</span>)</span>{
+	<span class="hljs-keyword">var</span> candidate;
+	<span class="hljs-keyword">if</span>(__private.peers[peer.ip]){
+		 candidate = __private.peers[peer.ip];
+		<span class="hljs-keyword">if</span>(candidate.liteclient &amp;&amp; peer.port&gt;<span class="hljs-number">79</span>){
+			candidate = <span class="hljs-keyword">new</span> Peer(peer.ip, peer.port, peer.version, peer.os);
+			__private.peers[peer.ip] = candidate;
+		}
+		candidate.unban();
+	}
+	<span class="hljs-keyword">else</span> {
+		candidate = <span class="hljs-keyword">new</span> Peer(peer.ip, peer.port, peer.version, peer.os);
+		__private.peers[peer.ip] = candidate;
+	}
+	<span class="hljs-keyword">return</span> candidate;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Private methods</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>__private.attachApi = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+	<span class="hljs-keyword">var</span> router = <span class="hljs-keyword">new</span> Router();
+
+	router.use(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, res, next</span>) </span>{
+		<span class="hljs-keyword">if</span> (modules) { <span class="hljs-keyword">return</span> next(); }
+		res.status(<span class="hljs-number">500</span>).send({<span class="hljs-attr">success</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">error</span>: <span class="hljs-string">'Blockchain is loading'</span>});
+	});
+
+	router.map(shared, {
+		<span class="hljs-string">'get /'</span>: <span class="hljs-string">'getPeers'</span>,
+		<span class="hljs-string">'get /version'</span>: <span class="hljs-string">'version'</span>,
+		<span class="hljs-string">'get /get'</span>: <span class="hljs-string">'getPeer'</span>
+	});
+
+	router.use(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) </span>{
+		res.status(<span class="hljs-number">500</span>).send({<span class="hljs-attr">success</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">error</span>: <span class="hljs-string">'API endpoint not found'</span>});
+	});
+
+	library.network.app.use(<span class="hljs-string">'/api/peers'</span>, router);
+	library.network.app.use(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, req, res, next</span>) </span>{
+		<span class="hljs-keyword">if</span> (!err) { <span class="hljs-keyword">return</span> next(); }
+		library.logger.error(<span class="hljs-string">'API error '</span> + req.url, err);
+		res.status(<span class="hljs-number">500</span>).send({<span class="hljs-attr">success</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">error</span>: <span class="hljs-string">'API error: '</span> + err.message});
+	});
+};
+
+__private.updatePeersList = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
+	library.logger.debug(<span class="hljs-string">'updating Peers List...'</span>);
+	__private.lastPeersUpdate = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().getTime();
+	modules.transport.requestFromRandomPeer({
+		<span class="hljs-attr">api</span>: <span class="hljs-string">'/list'</span>,
+		<span class="hljs-attr">method</span>: <span class="hljs-string">'GET'</span>
+	}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, res</span>) </span>{
+		<span class="hljs-keyword">if</span> (err) {
+			library.logger.debug(<span class="hljs-string">'peers validation error '</span>, err);
+			<span class="hljs-keyword">return</span> cb();
+		}
+
+		library.schema.validate(res.body, schema.updatePeersList.peers, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+			<span class="hljs-keyword">if</span> (err) {
+				library.logger.debug(<span class="hljs-string">'peers validation error '</span>, err);
+				<span class="hljs-keyword">return</span> cb();
+			}
+
+			<span class="hljs-keyword">var</span> peers = res.body.peers;
+
+			<span class="hljs-keyword">async</span>.each(peers, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">peer, eachCb</span>) </span>{
+				peer = self.inspect(peer);
+
+				library.schema.validate(peer, schema.updatePeersList.peer, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+					<span class="hljs-keyword">if</span> (err) {
+						err.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) </span>{
+							library.logger.error([<span class="hljs-string">'Rejecting invalid peer:'</span>, peer.ip, e.path, e.message].join(<span class="hljs-string">' '</span>));
+						});
+
+						<span class="hljs-keyword">return</span> eachCb();
+					} <span class="hljs-keyword">else</span> {
+						self.accept(peer);
+						<span class="hljs-keyword">return</span> eachCb();
+					}
+				});
+			}, cb);
+		});
+	});
+};
+
+__private.count = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.keys(__private.peers).length;
+};
+
+__private.banManager = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
+	<span class="hljs-keyword">return</span> cb(<span class="hljs-literal">null</span>, <span class="hljs-number">1</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>library.db.query(sql.banManager, { now: Date.now() }).then(function (res) {
+    return cb(null, res);
+}).catch(function (err) {
+    library.logger.error(“stack”, err.stack);
+    return cb(‘Peers#banManager error’);
+});</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+          
+            <div class="fullblock">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Public methods</p>
+<p><strong>API</strong> <code>inspect</code></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Peers.prototype.inspect = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">peer</span>) </span>{
+	<span class="hljs-keyword">if</span>(peer == <span class="hljs-number">-1</span>){
+		<span class="hljs-keyword">return</span> {};
+	}
+	<span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^[0-9]+$/</span>.test(peer.ip)) {
+		peer.ip = ip.fromLong(peer.ip);
+	}
+	<span class="hljs-keyword">if</span>(peer.port){
+		peer.port = <span class="hljs-built_in">parseInt</span>(peer.port);
+	}
+
+	<span class="hljs-keyword">if</span> (peer.ip) {
+		peer.string = (peer.ip + <span class="hljs-string">':'</span> + peer.port || <span class="hljs-string">'unknown'</span>);
+	} <span class="hljs-keyword">else</span> {
+		peer.string = <span class="hljs-string">'unknown'</span>;
+	}
+
+	peer.os = peer.os || <span class="hljs-string">'unknown'</span>;
+	peer.version = peer.version || <span class="hljs-string">'0.0.0'</span>;
+
+	<span class="hljs-keyword">return</span> peer;
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">shuffle</span>(<span class="hljs-params">array</span>) </span>{
+	<span class="hljs-keyword">var</span> currentIndex = array.length, temporaryValue, randomIndex;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>While there remain elements to shuffle…</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">while</span> (<span class="hljs-number">0</span> !== currentIndex) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Pick a remaining element…</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		randomIndex = <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * currentIndex);
+		currentIndex -= <span class="hljs-number">1</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>And swap it with the current element.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+
+	<span class="hljs-keyword">return</span> array;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+          
+            <div class="fullblock">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p><strong>API</strong> <code>listGoodPeers</code></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>send peers, with in priority peers that have good response time</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Peers.prototype.listGoodPeers = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+
+	<span class="hljs-keyword">var</span> peers = <span class="hljs-built_in">Object</span>.values(__private.peers);
+
+	<span class="hljs-keyword">var</span> list = peers.filter(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">peer</span>)</span>{
+		<span class="hljs-keyword">return</span> peer.delay &lt; <span class="hljs-number">2000</span>;
+	});
+
+	<span class="hljs-keyword">return</span> shuffle(list);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+          
+            <div class="fullblock">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p><strong>API</strong> <code>listPBFTPeers</code></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>send peers, with in priority peers that have good response time and on same chain</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Peers.prototype.listPBFTPeers = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+
+	<span class="hljs-keyword">var</span> peers = <span class="hljs-built_in">Object</span>.values(__private.peers);
+
+	<span class="hljs-keyword">var</span> list = peers.filter(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">peer</span>)</span>{
+		<span class="hljs-keyword">return</span> peer.status!=<span class="hljs-string">"FORK"</span> &amp;&amp; peer.delay &lt; <span class="hljs-number">2000</span>;
+	});
+
+	<span class="hljs-keyword">return</span> shuffle(list);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+          
+            <div class="fullblock">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p><strong>API</strong> <code>listBroadcastPeers</code></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>send peers, with in priority peers that seems to be in same chain</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Peers.prototype.listBroadcastPeers = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+
+	<span class="hljs-keyword">var</span> peers = <span class="hljs-built_in">Object</span>.values(__private.peers);
+
+	<span class="hljs-keyword">var</span> list = peers.filter(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">peer</span>)</span>{
+		<span class="hljs-keyword">return</span> peer.status != <span class="hljs-string">"FORK"</span> &amp;&amp; !peer.liteclient &amp;&amp; peer.counterror &lt; <span class="hljs-number">8</span>;
+	});
+
+	<span class="hljs-keyword">return</span> shuffle(list);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+          
+            <div class="fullblock">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Events</p>
+<p><strong>EVENT</strong> <code>onBind</code></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Peers.prototype.onBind = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">scope</span>) </span>{
+	modules = scope;
+	Peer.bind({<span class="hljs-attr">modules</span>: modules, <span class="hljs-attr">library</span>: library});
+
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>;i&lt;library.config.peers.list.length;i++){
+		<span class="hljs-keyword">var</span> peer = library.config.peers.list[i];
+		peer = self.accept(peer);
+		peer.status = <span class="hljs-string">"OK"</span>;
+		peer.delay = <span class="hljs-number">0</span>;
+	}
+
+	setImmediate(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nextUpdate</span> (<span class="hljs-params"></span>) </span>{
+		__private.updatePeersList(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+			<span class="hljs-keyword">if</span> (err) {
+				library.logger.error(<span class="hljs-string">'Error while updating the list of peers'</span>, err);
+			}
+			setTimeout(nextUpdate, <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>);
+		});
+	});
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+          
+            <div class="fullblock">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p><strong>EVENT</strong> <code>onAttachPublicApi</code></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Peers.prototype.onAttachPublicApi = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+ 	__private.attachApi();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+          
+            <div class="fullblock">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p><strong>EVENT</strong> <code>onUpdatePeers</code></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Peers.prototype.onUpdatePeers = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+	__private.updatePeersList(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+		<span class="hljs-keyword">if</span> (err) {
+			library.logger.error(<span class="hljs-string">'Error while updating the list of peers:'</span>, err);
+		}
+		library.bus.message(<span class="hljs-string">'peersUpdated'</span>);
+	});
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+          
+            <div class="fullblock">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p><strong>EVENT</strong> <code>onPeersReady</code></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Peers.prototype.onPeersReady = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+
+	setImmediate(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nextBanManager</span> (<span class="hljs-params"></span>) </span>{
+		__private.banManager(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+			<span class="hljs-keyword">if</span> (err) {
+				library.logger.error(<span class="hljs-string">'Ban manager timer:'</span>, err);
+			}
+			setTimeout(nextBanManager, <span class="hljs-number">65</span> * <span class="hljs-number">1000</span>);
+		});
+	});
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Shared</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+shared.getPeers = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, cb</span>) </span>{
+	library.schema.validate(req.body, schema.getPeers, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+		<span class="hljs-keyword">if</span> (err) {
+			<span class="hljs-keyword">return</span> cb(err[<span class="hljs-number">0</span>].message);
+		}
+
+		<span class="hljs-keyword">if</span> (req.body.limit &lt; <span class="hljs-number">0</span> || req.body.limit &gt; <span class="hljs-number">100</span>) {
+			<span class="hljs-keyword">return</span> cb(<span class="hljs-string">'Invalid limit. Maximum is 100'</span>);
+		}
+
+		<span class="hljs-keyword">var</span> peers = self.listBroadcastPeers();
+		peers = peers.map(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">peer</span>)</span>{<span class="hljs-keyword">return</span> peer.toObject()});
+		<span class="hljs-keyword">return</span> cb(<span class="hljs-literal">null</span>, {<span class="hljs-attr">peers</span>: peers});
+	});
+};
+
+shared.getPeer = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, cb</span>) </span>{
+	library.schema.validate(req.body, schema.getPeer, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+		<span class="hljs-keyword">if</span> (err) {
+			<span class="hljs-keyword">return</span> cb(err[<span class="hljs-number">0</span>].message);
+		}
+
+		<span class="hljs-keyword">var</span> peer = __private.peers[req.body.ip];
+		<span class="hljs-keyword">if</span> (peer) {
+			<span class="hljs-keyword">return</span> cb(<span class="hljs-literal">null</span>, {<span class="hljs-attr">success</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">peer</span>: peer.toObject()});
+		} <span class="hljs-keyword">else</span> {
+			<span class="hljs-keyword">return</span> cb(<span class="hljs-literal">null</span>, {<span class="hljs-attr">success</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">error</span>: <span class="hljs-string">'Peer not found'</span>});
+		}
+
+	});
+};
+
+shared.version = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, cb</span>) </span>{
+	<span class="hljs-keyword">return</span> cb(<span class="hljs-literal">null</span>, {<span class="hljs-attr">version</span>: library.config.version, <span class="hljs-attr">build</span>: library.build});
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+          
+            <div class="annotation">
+          
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Export</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports = Peers;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -2,12 +2,18 @@
 
 <html>
 <head>
-  <title>Ark</title>
+  <title>README.md</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="arkio.css" />
 </head>
 <body>
+  
+    <div id="title">
+         <h1>README.md</h1>
+         <img src="https://ark.io/wp-content/uploads/2016/10/ark-normal.png">
+        <hr>
+    </div>
   
   <div id="container">
     <div id="background"></div>
@@ -76,6 +82,11 @@
                 </a>
               
                 
+                <a class="source" href="server.html">
+                  server.js
+                </a>
+              
+                
                 <a class="source" href="signatures.html">
                   signatures.js
                 </a>
@@ -116,18 +127,21 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="ark">Ark</h1>
-<p>Ark is a next generation crypto-currency and decentralized application platform, written entirely in JavaScript. For more information please refer to our website: <a href="https://ark.io/">https://ark.io/</a>.</p>
-<p>The Token Exchange Campaign is up at <a href="https://tec.ark.io">https://tec.ark.io</a></p>
-<p>This version is still alpha, use at your own risks</p>
+              <p><img src="https://github.com/kapucoin/kapu-node/blob/development/KAPU_NODE.jpg" alt="KAPU-NODE">
+Kapu is a next generation crypto-currency and decentralized application platform, written entirely in JavaScript. For more information please refer to our website: <a href="https://kapu.one/">https://kapu.one/</a>.</p>
+<p>This version is still beta, use at your own risks</p>
 <h2 id="install-upgrade-etc-">Install, Upgrade etc…</h2>
 <p>You need to provision a linux (ubuntu tested) server (digital ocean, vultur or other).</p>
-<p>Then use the excellent ark-commander script</p>
+<p>Then use the excellent kapu-shell script</p>
 <pre><code>cd
-wget https://ark.io/ARKcommander.sh
-bash ARKcommander.sh
-</code></pre><p>For developers, please read below in section “Developer Installation”</p>
-<h2 id="details">Details</h2>
+wget https://www.kapu.one/KAPUshell_mainnet.sh
+bash KAPUshell_mainnet.sh
+</code></pre><p>For developers, please read the “Developer Installation” section below.  </p>
+<p>or Alternatively run</p>
+<pre><code>cd
+wget https://www.kapu.one/KAPUshell_devnet.sh
+bash KAPUshell_devnet.sh
+</code></pre><h2 id="details">Details</h2>
 <p>This is a fork from Lisk with the following features:</p>
 <ul>
 <li>Removed sidechains (deprecated in favor of smartbridge)</li>
@@ -158,13 +172,25 @@ bash ARKcommander.sh
 <li>pushed to 10tx/s on devnet</li>
 </ul>
 <h2 id="developer-installation">Developer Installation</h2>
+<h3 id="vagrant">Vagrant</h3>
+<p><a href="https://www.vagrantup.com/">Vagrant</a> is a virtual development environment manager backed by a provider like <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a>.</p>
+<p>To start the Vagrant environment:</p>
+<pre><code>vagrant up
+</code></pre><p>All dependency installation and configuration for the dev environment is in the <code>VagrantFile</code>. After installation, kapu-node will automatically start and log all output to the console.</p>
+<p>To log into the Vagrant environment:</p>
+<pre><code>vagrant ssh
+</code></pre><p>To destroy and revert to the original state:</p>
+<pre><code>vagrant destroy
+vagrant up
+</code></pre><p>There will be a drive shared with the host machine inside the VM, mounted at <code>/vagrant</code>.</p>
+<h3 id="non-vagrant">Non-Vagrant</h3>
 <p>Install essentials:</p>
 <pre><code>sudo apt-get update
 sudo apt-get install -y curl build-essential python git
 </code></pre><p>Install PostgreSQL (min version: 9.5.2)</p>
 <pre><code>sudo apt-get install -y postgresql postgresql-contrib
 sudo -u postgres createuser --createdb --password $USER
-createdb ark_test
+createdb kapu_devnet
 </code></pre><p>Install Node.js (tested with version 6.9.2, but any recent LTS release should do):</p>
 <pre><code>sudo apt-get install -y nodejs
 sudo npm install -g n
@@ -172,41 +198,43 @@ sudo n 6.9.2
 </code></pre><p>Install grunt-cli (globally):</p>
 <pre><code>sudo npm install grunt-cli -g
 </code></pre><p>Clone this repository</p>
-<pre><code>git clone https://github.com/arkecosytem/ark-node.git
-cd ark-node
+<pre><code>git clone -b development https://github.com/kapucoin/kapu-node.git
+cd kapu-node
 </code></pre><p>Install node modules:</p>
 <pre><code>npm install libpq secp256k1
 npm install
 </code></pre><h2 id="launch">Launch</h2>
-<p>To launch Ark on testnet:</p>
-<pre><code>createdb ark_testnet
-node run start:testnet
-</code></pre><p>To launch Ark on devtnet:</p>
-<pre><code>createdb ark_devnet
-node run start:devnet
-</code></pre><p>To launch Ark on mainnet (when launched):</p>
-<pre><code>createdb ark_mainnet
-node run start:mainnet
+<p>To launch KAPU on testnet:</p>
+<pre><code>createdb kapu_testnet
+npm run start:testnet
+</code></pre><p>To launch KAPU on devtnet:</p>
+<pre><code>createdb kapu_devnet
+npm run start:devnet
+</code></pre><p>To launch KAPU on mainnet (when launched):</p>
+<pre><code>createdb kapu_mainnet
+npm run start:mainnet
 </code></pre><p><strong>NOTE:</strong> The <strong>port</strong>, <strong>address</strong>, <strong>genesis block</strong> and <strong>config-path</strong> can be overridden by providing the relevant command switch:</p>
 <pre><code>node app.js -p [port] -a [address] -c [config-path] -g [genesisBlock-path]
 </code></pre><p>This allow you to run several different networks, or your own private chain</p>
 <h2 id="launch-your-own-private-or-public-chain">Launch your own private or public chain</h2>
 <p>Generate a genesisBlock.json + a default config.json containing all passphrases of genesis delegates</p>
 <pre><code>node tasks/createGenesisBlock.js
-</code></pre><p>You can find generated files in tasks/</p>
+</code></pre><p>Be sure to configure this file for your needs</p>
 <ul>
-<li>genesisBlock.json</li>
-<li>config.json</li>
-<li>delegatesPassphrases.json (containing details about the genesis delegates)</li>
-<li>genesisPassphrase.json (containing the details of account having all premined arks)</li>
+<li>a genesisBlock.json containing the genesis block</li>
+<li>a config.json containing configuration to start relay nodes</li>
+<li>an autoforging config.json containing configuration to start all delegates on a single node (for testing purpose)</li>
+<li>a bunch of config files to distribute to different configured delegate nodes starting the network.</li>
+<li>a delegatesPassphrases.json containing details about the genesis delegates</li>
+<li>a genesisPassphrase.json containing the details of delegates that will launch your network</li>
 </ul>
 <p>Obviously you can hack away tasks/createGenesisBlock.js for your own custom use.</p>
 <p>You can the start with your own chain on a single node (all delegates will forge on your single node) using:</p>
-<pre><code>createdb ark_newtest
+<pre><code>createdb kapu_newtest
 npm run start:newtest
 </code></pre><p>Then you can distribute the config.json (without the delegates secrets inside, and with custom peers settings) to peers to let them join your chain</p>
 <h2 id="tests">Tests</h2>
-<p>Load git submodule <a href="https://github.com/arkecosystem/ark-js">ark-js</a>:</p>
+<p>Load git submodule <a href="https://github.com/gsilvestri/kapu-js">kapu-js</a>:</p>
 <pre><code>git submodule init
 git submodule update
 </code></pre><p>You should run using test configurations</p>
@@ -220,15 +248,16 @@ npm test -- test/api/transactions.js
 <pre><code>peace vanish bleak box tuna woman rally manage undo royal lucky since
 </code></pre><h2 id="authors">Authors</h2>
 <ul>
-<li>FX Thoorens <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#102;&#120;&#46;&#116;&#104;&#x6f;&#111;&#114;&#101;&#x6e;&#115;&#64;&#x61;&#114;&#107;&#46;&#x69;&#x6f;">&#102;&#120;&#46;&#116;&#104;&#x6f;&#111;&#114;&#101;&#x6e;&#115;&#64;&#x61;&#114;&#107;&#46;&#x69;&#x6f;</a></li>
-<li>Boris Povod <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x62;&#111;&#114;&#105;&#115;&#x40;&#x63;&#114;&#121;&#112;&#x74;&#x69;&#x2e;&#109;&#101;">&#x62;&#111;&#114;&#105;&#115;&#x40;&#x63;&#114;&#121;&#112;&#x74;&#x69;&#x2e;&#109;&#101;</a></li>
-<li>Pavel Nekrasov <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#108;&#x61;&#110;&#x64;&#103;&#114;&#x61;&#102;&#46;&#x70;&#x61;&#117;&#x6c;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#108;&#x61;&#110;&#x64;&#103;&#114;&#x61;&#102;&#46;&#x70;&#x61;&#117;&#x6c;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a></li>
-<li>Sebastian Stupurac <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x73;&#x74;&#117;&#x70;&#117;&#114;&#x61;&#99;&#46;&#115;&#x65;&#x62;&#97;&#x73;&#x74;&#x69;&#97;&#110;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#x6d;">&#x73;&#x74;&#117;&#x70;&#117;&#114;&#x61;&#99;&#46;&#115;&#x65;&#x62;&#97;&#x73;&#x74;&#x69;&#97;&#110;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#x6d;</a></li>
-<li>Oliver Beddows <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x6f;&#108;&#105;&#118;&#101;&#x72;&#64;&#108;&#x69;&#x73;&#107;&#x2e;&#105;&#x6f;">&#x6f;&#108;&#105;&#118;&#101;&#x72;&#64;&#108;&#x69;&#x73;&#107;&#x2e;&#105;&#x6f;</a></li>
+<li>FX Thoorens <a href="mailto:&#x66;&#120;&#46;&#x74;&#104;&#111;&#x6f;&#114;&#x65;&#110;&#x73;&#x40;&#97;&#114;&#107;&#46;&#105;&#x6f;">&#x66;&#120;&#46;&#x74;&#104;&#111;&#x6f;&#114;&#x65;&#110;&#x73;&#x40;&#97;&#114;&#107;&#46;&#105;&#x6f;</a></li>
+<li>Boris Povod <a href="mailto:&#98;&#x6f;&#x72;&#105;&#115;&#x40;&#x63;&#114;&#121;&#x70;&#x74;&#x69;&#x2e;&#109;&#101;">&#98;&#x6f;&#x72;&#105;&#115;&#x40;&#x63;&#114;&#121;&#x70;&#x74;&#x69;&#x2e;&#109;&#101;</a></li>
+<li>Pavel Nekrasov <a href="mailto:&#x6c;&#x61;&#x6e;&#x64;&#x67;&#114;&#x61;&#102;&#46;&#112;&#x61;&#117;&#108;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#x6c;&#x61;&#x6e;&#x64;&#x67;&#114;&#x61;&#102;&#46;&#112;&#x61;&#117;&#108;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></li>
+<li>Sebastian Stupurac <a href="mailto:&#x73;&#x74;&#x75;&#112;&#x75;&#x72;&#x61;&#99;&#46;&#115;&#101;&#98;&#97;&#x73;&#x74;&#105;&#97;&#110;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#111;&#x6d;">&#x73;&#x74;&#x75;&#112;&#x75;&#x72;&#x61;&#99;&#46;&#115;&#101;&#98;&#97;&#x73;&#x74;&#105;&#97;&#110;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#111;&#x6d;</a></li>
+<li>Oliver Beddows <a href="mailto:&#111;&#108;&#x69;&#x76;&#x65;&#114;&#x40;&#108;&#x69;&#115;&#x6b;&#46;&#x69;&#111;">&#111;&#108;&#x69;&#x76;&#x65;&#114;&#x40;&#108;&#x69;&#115;&#x6b;&#46;&#x69;&#111;</a></li>
 </ul>
 <h2 id="license">License</h2>
 <p>The MIT License (MIT)</p>
-<p>Copyright (c) 2016 Ark
+<p>Copyright (c) 2018 KAPU International Kft
+Copyright (c) 2016-2017 Ark
 Copyright (c) 2016 Lisk
 Copyright (c) 2014-2015 Crypti</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:  </p>

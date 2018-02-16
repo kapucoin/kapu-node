@@ -16,7 +16,7 @@ function postTransaction (transaction, done) {
 }
 
 function sendArk (params, done) {
-	var transaction = node.ark.transaction.createTransaction(params.recipientId, params.amount, null, params.secret);
+	var transaction = node.kapu.transaction.createTransaction(params.recipientId, params.amount, null, params.secret);
 
 	postTransaction(transaction, function (err, res) {
 		node.expect(res.body).to.have.property('success').to.be.ok;
@@ -40,7 +40,7 @@ describe('POST /peer/transactions', function () {
 		});
 
 		it('using undefined transaction.asset', function (done) {
-			var transaction = node.ark.signature.createSignature(node.randomPassword(), node.randomPassword());
+			var transaction = node.kapu.signature.createSignature(node.randomPassword(), node.randomPassword());
 
 			delete transaction.asset;
 
@@ -54,11 +54,11 @@ describe('POST /peer/transactions', function () {
 		describe('when account has no funds', function () {
 
 			it('should fail', function (done) {
-				var transaction = node.ark.signature.createSignature(node.randomPassword(), node.randomPassword());
+				var transaction = node.kapu.signature.createSignature(node.randomPassword(), node.randomPassword());
 
 				postTransaction(transaction, function (err, res) {
 					node.expect(res.body).to.have.property('success').to.be.not.ok;
-					node.expect(res.body).to.have.property('error').to.match(/Account does not have enough ARK: [a-zA-Z0-9]+ balance: 0/);
+					node.expect(res.body).to.have.property('error').to.match(/Account does not have enough KAPU: [a-zA-Z0-9]+ balance: 0/);
 					done();
 				});
 			});
@@ -75,7 +75,7 @@ describe('POST /peer/transactions', function () {
 			});
 
 			it('should be ok', function (done) {
-				var transaction = node.ark.signature.createSignature(account.password, account.secondPassword);
+				var transaction = node.kapu.signature.createSignature(account.password, account.secondPassword);
 				transaction.fee = node.fees.secondPasswordFee;
 
 				postTransaction(transaction, function (err, res) {
@@ -99,7 +99,7 @@ describe('POST /peer/transactions', function () {
 		});
 
 		it('when account does not have one should fail', function (done) {
-			var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password, account.secondPassword);
+			var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, node.gAccount.password, account.secondPassword);
 
 			postTransaction(transaction, function (err, res) {
 				node.expect(res.body).to.have.property('success').to.be.not.ok;
@@ -108,7 +108,7 @@ describe('POST /peer/transactions', function () {
 		});
 
 		it('using blank second passphrase should fail', function (done) {
-			var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, account.password, '');
+			var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, account.password, '');
 
 			postTransaction(transaction, function (err, res) {
 				node.expect(res.body).to.have.property('success').to.be.not.ok;
@@ -117,9 +117,9 @@ describe('POST /peer/transactions', function () {
 		});
 
 		it('using fake second passphrase should fail', function (done) {
-			var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, account.password, account2.secondPassword);
+			var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, account.password, account2.secondPassword);
 			transaction.signSignature = crypto.randomBytes(64).toString('hex');
-			transaction.id = node.ark.crypto.getId(transaction);
+			transaction.id = node.kapu.crypto.getId(transaction);
 
 			postTransaction(transaction, function (err, res) {
 				node.expect(res.body).to.have.property('success').to.be.not.ok;
@@ -128,7 +128,7 @@ describe('POST /peer/transactions', function () {
 		});
 
 		it('using valid second passphrase should be ok', function (done) {
-			var transaction = node.ark.transaction.createTransaction(testaccount.address, 1, null, account.password, account.secondPassword);
+			var transaction = node.kapu.transaction.createTransaction(testaccount.address, 1, null, account.password, account.secondPassword);
 
 			postTransaction(transaction, function (err, res) {
 				node.expect(res.body).to.have.property('success').to.be.ok;

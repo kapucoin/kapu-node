@@ -4,8 +4,8 @@
 var node = {};
 var networkName = "testnet"
 var network = require('../networks.json')[networkName];
-node.ark = require('./ark-js');
-node.ark.crypto.setNetworkVersion(network.pubKeyHash);
+node.kapu = require('./kapu-js');
+node.kapu.crypto.setNetworkVersion(network.pubKeyHash);
 
 // Requires
 node.bignum = require('../helpers/bignum.js');
@@ -31,7 +31,7 @@ require('colors');
 node.baseUrl = 'http://localhost:' + node.config.port;
 node.api = node.supertest(node.baseUrl);
 
-node.normalizer = 100000000; // Use this to convert ARK amount to normal value
+node.normalizer = 100000000; // Use this to convert KAPU amount to normal value
 node.blockTime = 10000; // Block time in miliseconds
 node.blockTimePlus = 12000; // Block time + 2 seconds in miliseconds
 node.version = '0.0.0'; // Node version
@@ -60,8 +60,8 @@ if (process.env.SILENT === 'true') {
 	node.debug = console.log;
 }
 
-// Random ARK amount
-node.Ark = Math.floor(Math.random() * (100000 * 100000000)) + 1;
+// Random KAPU amount
+node.Kapu = Math.floor(Math.random() * (100000 * 100000000)) + 1;
 
 // Returns a random delegate name
 node.randomDelegateName = function () {
@@ -87,7 +87,7 @@ node.randomProperty = function (obj, needKey) {
 	}
 };
 
-// Returns random ARK amount
+// Returns random KAPU amount
 node.randomArk = function () {
 	return Math.floor(Math.random() * (100 * 100000000)) + (10 * 100000000);
 };
@@ -270,8 +270,8 @@ node.randomAccount = function () {
 	account.password = node.randomPassword();
 	account.secondPassword = node.randomPassword();
 	account.username = node.randomDelegateName();
-	account.publicKey = node.ark.crypto.getKeys(account.password, network).publicKey;
-	account.address = node.ark.crypto.getAddress(account.publicKey, network.pubKeyHash);
+	account.publicKey = node.kapu.crypto.getKeys(account.password, network).publicKey;
+	account.address = node.kapu.crypto.getAddress(account.publicKey, network.pubKeyHash);
 
 	return account;
 };

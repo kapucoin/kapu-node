@@ -1,7 +1,7 @@
 var moment = require('moment');
 var fs = require('fs');
 var path = require('path');
-var arkjs = require('arkjs');
+var kapujs = require('kapujs');
 var crypto = require('crypto');
 var bip39 = require('bip39');
 var ByteBuffer = require('bytebuffer');
@@ -49,7 +49,7 @@ var seed_peers = [
 ];
 
 // default db named
-var db_name = "ark_" + network_name;
+var db_name = "kapu_" + network_name;
 
 // optional premined accounts. Example :
 // [
@@ -75,7 +75,7 @@ var config = {
     address: "0.0.0.0",
     version: config_version,
     fileLogLevel: "info",
-    logFileName: "logs/ark.log",
+    logFileName: "logs/kapu.log",
     consoleLogLevel: "debug",
     trustProxy: false,
     db: {
@@ -139,15 +139,15 @@ var config = {
         options: {
             port: 443,
             address: "0.0.0.0",
-            key: "./ssl/ark.key",
-            cert: "./ssl/ark.crt"
+            key: "./ssl/kapu.key",
+            cert: "./ssl/kapu.crt"
         }
     },
     network: network_name
 };
 // general functions
 makeKeypair = function (seed) {
-	return arkjs.crypto.getKeys(seed, networks[config.network]);
+	return kapujs.crypto.getKeys(seed, networks[config.network]);
 };
 
 sign = function (block, keypair) {
@@ -246,7 +246,7 @@ create = function (data) {
 
 	for (var i = 0; i < transactions.length; i++) {
 		var transaction = transactions[i];
-		var bytes = arkjs.crypto.getBytes(transaction);
+		var bytes = kapujs.crypto.getBytes(transaction);
 
 		size += bytes.length;
 
@@ -289,7 +289,7 @@ create = function (data) {
 var delegates = [];
 var transactions = [];
 var remainingfund = {};
-arkjs.crypto.setNetworkVersion(networks[network_name].pubKeyHash);
+kapujs.crypto.setNetworkVersion(networks[network_name].pubKeyHash);
 
 var genesis = {
   passphrase: bip39.generateMnemonic(),
@@ -300,11 +300,11 @@ var premine = {
   passphrase: bip39.generateMnemonic()
 };
 
-premine.publicKey = arkjs.crypto.getKeys(premine.passphrase).publicKey;
-premine.address = arkjs.crypto.getAddress(premine.publicKey, networks[config.network].pubKeyHash);
+premine.publicKey = kapujs.crypto.getKeys(premine.passphrase).publicKey;
+premine.address = kapujs.crypto.getAddress(premine.publicKey, networks[config.network].pubKeyHash);
 
-genesis.publicKey = arkjs.crypto.getKeys(genesis.passphrase).publicKey;
-genesis.address = arkjs.crypto.getAddress(genesis.publicKey, networks[config.network].pubKeyHash);
+genesis.publicKey = kapujs.crypto.getKeys(genesis.passphrase).publicKey;
+genesis.address = kapujs.crypto.getAddress(genesis.publicKey, networks[config.network].pubKeyHash);
 
 // creation of delegates
 for(var i=1; i<52; i++){
@@ -313,16 +313,16 @@ for(var i=1; i<52; i++){
     'username': "genesis_"+i
   };
 
-	delegate.publicKey = arkjs.crypto.getKeys(delegate.passphrase).publicKey;
-	delegate.address = arkjs.crypto.getAddress(delegate.publicKey, networks[config.network].pubKeyHash);
+	delegate.publicKey = kapujs.crypto.getKeys(delegate.passphrase).publicKey;
+	delegate.address = kapujs.crypto.getAddress(delegate.publicKey, networks[config.network].pubKeyHash);
 
 	// create delegate
-  var createDelegateTx = arkjs.delegate.createDelegate(delegate.passphrase, delegate.username);
+  var createDelegateTx = kapujs.delegate.createDelegate(delegate.passphrase, delegate.username);
   createDelegateTx.fee = 0;
   createDelegateTx.timestamp = 0;
   createDelegateTx.senderId = delegate.address;
-  createDelegateTx.signature = arkjs.crypto.sign(createDelegateTx,arkjs.crypto.getKeys(delegate.passphrase));
-  createDelegateTx.id = arkjs.crypto.getId(createDelegateTx);
+  createDelegateTx.signature = kapujs.crypto.sign(createDelegateTx,kapujs.crypto.getKeys(delegate.passphrase));
+  createDelegateTx.id = kapujs.crypto.getId(createDelegateTx);
 
   transactions.push(createDelegateTx);
 
@@ -335,31 +335,31 @@ for(var i=0; i < genesisAccounts.length; i++){
   var account = genesisAccounts[i];
   total += account.total;
 
-	//send ark to account
-	var premineTx = arkjs.transaction.createTransaction(account.address, account.total, null, premine.passphrase);
+	//send kapu to account
+	var premineTx = kapujs.transaction.createTransaction(account.address, account.total, null, premine.passphrase);
 
 	premineTx.fee = 0;
 	premineTx.timestamp = 0;
 	premineTx.senderId = premine.address;
-	premineTx.signature = arkjs.crypto.sign(premineTx,arkjs.crypto.getKeys(premine.passphrase));
-	premineTx.id = arkjs.crypto.getId(premineTx);
+	premineTx.signature = kapujs.crypto.sign(premineTx,kapujs.crypto.getKeys(premine.passphrase));
+	premineTx.id = kapujs.crypto.getId(premineTx);
 	transactions.push(premineTx);
 
 }
 
 remainingfund.total = totalpremine - total;
 
-var preminefund = arkjs.transaction.createTransaction(genesis.address, remainingfund.total, null, premine.passphrase);
+var preminefund = kapujs.transaction.createTransaction(genesis.address, remainingfund.total, null, premine.passphrase);
 
 preminefund.fee = 0;
 preminefund.timestamp = 0;
 preminefund.senderId = premine.address;
-preminefund.signature = arkjs.crypto.sign(preminefund,arkjs.crypto.getKeys(premine.passphrase));
-preminefund.id = arkjs.crypto.getId(preminefund);
+preminefund.signature = kapujs.crypto.sign(preminefund,kapujs.crypto.getKeys(premine.passphrase));
+preminefund.id = kapujs.crypto.getId(preminefund);
 transactions.push(preminefund);
 
 var genesisBlock = create({
-  keypair: arkjs.crypto.getKeys(genesis.passphrase, networks[config.network]),
+  keypair: kapujs.crypto.getKeys(genesis.passphrase, networks[config.network]),
   transactions:transactions,
   timestamp:0
 });

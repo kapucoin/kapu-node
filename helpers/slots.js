@@ -3,7 +3,7 @@
 var constants = require('./constants.js');
 
 /**
- * Get time from Ark epoch.
+ * Get time from KAPU epoch.
  * @param {number|undefined} time Time in unix seconds
  * @returns {number}
  */
