@@ -215,6 +215,7 @@ peace vanish bleak box tuna woman rally manage undo royal lucky since
 - Pavel Nekrasov <landgraf.paul@gmail.com>
 - Sebastian Stupurac <stupurac.sebastian@gmail.com>
 - Oliver Beddows <oliver@lisk.io>
+- Giovanni Silvestri <gsit80@gmail.com>
 
 ## License
 
