@@ -122,20 +122,6 @@ npm install libpq secp256k1
 npm install
 ```
 
-## Launch
-
-To launch KAPU on devtnet:
-```
-createdb kapu_devnet
-npm run start:devnet
-```
-
-To launch KAPU on mainnet:
-```
-createdb kapu_mainnet
-npm run start:mainnet
-```
-
 ## Launch with forever
 
 Install forever
@@ -156,6 +142,20 @@ forever list
 Stop running instances
 ```
 forever stopall
+```
+
+## Launch with NPM
+
+To launch KAPU on devtnet:
+```
+createdb kapu_devnet
+npm run start:devnet
+```
+
+To launch KAPU on mainnet:
+```
+createdb kapu_mainnet
+npm run start:mainnet
 ```
 
 **NOTE:** The **port**, **address**, **genesis block** and **config-path** can be overridden by providing the relevant command switch:
