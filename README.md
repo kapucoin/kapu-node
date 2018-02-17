@@ -86,13 +86,12 @@ Install essentials:
 
 ```
 sudo apt-get update
-sudo apt-get install -y curl build-essential python git
+sudo apt-get install postgresql postgresql-contrib libpq-dev build-essential python git curl jq libtool autoconf locales automake locate zip unzip htop nmon iftop
 ```
 
 Install PostgreSQL (min version: 9.5.2)
 
 ```
-sudo apt-get install -y postgresql postgresql-contrib
 sudo -u postgres createuser --createdb --password $USER
 createdb kapu_devnet
 ```
@@ -100,7 +99,7 @@ createdb kapu_devnet
 Install Node.js (tested with version 6.9.2, but any recent LTS release should do):
 
 ```
-sudo apt-get install -y nodejs
+sudo apt-get install -y npm nodejs
 sudo npm install -g n
 sudo n 6.9.2
 ```
@@ -124,11 +123,6 @@ npm install
 ```
 
 ## Launch
-To launch KAPU on testnet:
-```
-createdb kapu_testnet
-npm run start:testnet
-```
 
 To launch KAPU on devtnet:
 ```
@@ -136,10 +130,32 @@ createdb kapu_devnet
 npm run start:devnet
 ```
 
-To launch KAPU on mainnet (when launched):
+To launch KAPU on mainnet:
 ```
 createdb kapu_mainnet
 npm run start:mainnet
+```
+
+## Launch with forever
+
+Install forever
+```
+npm install forever -g
+```
+
+Run DevNET
+```
+forever start app.js --config config.devnet.json --genesis genesisBlock.devnet.json
+```
+
+Check running instances
+```
+forever list
+```
+
+Stop running instances
+```
+forever stopall
 ```
 
 **NOTE:** The **port**, **address**, **genesis block** and **config-path** can be overridden by providing the relevant command switch:
