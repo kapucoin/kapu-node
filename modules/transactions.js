@@ -91,6 +91,11 @@ __private.list = function (filter, cb) {
 		params.ownerAddress = filter.ownerAddress;
 	}
 
+	if (filter.vendorField) {
+		where.push('"vendorField" = ${vendorField}');
+		params.vendorField = filter.vendorField;
+	}
+
 	if (filter.type >= 0) {
 		where.push('"type" = ${type}');
 		params.type = filter.type;
