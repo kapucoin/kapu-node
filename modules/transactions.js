@@ -92,7 +92,7 @@ __private.list = function (filter, cb) {
 	}
 
 	if (filter.vendorField) {
-		where.push('"vendorField" = ${vendorField}');
+		where.push('"vendorField" LIKE ${vendorField}');
 		params.vendorField = filter.vendorField;
 	}
 
