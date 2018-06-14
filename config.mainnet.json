@@ -1,10 +1,10 @@
 {
   "port": 9700,
   "address": "0.0.0.0",
-  "version": "0.3.0",
+  "version": "1.0.3",
   "fileLogLevel": "info",
   "logFileName": "logs/kapu.log",
-  "consoleLogLevel": "debug",
+  "consoleLogLevel": "info",
   "trustProxy": false,
   "db": {
     "host": "localhost",
@@ -34,6 +34,7 @@
     }
   },
   "peers": {
+    "queryReach": 20,
     "minimumNetworkReach": 1,
     "list": [
       { "ip": "51.15.198.173", "port": 4600},
@@ -70,9 +71,9 @@
     }
   },
   "forging": {
-    "coldstart": 6,
+    "coldstart": 30,
     "force": true,
-    "secret": [ ],
+    "secret": [],
     "access": {
       "whiteList": [
         "127.0.0.1"
