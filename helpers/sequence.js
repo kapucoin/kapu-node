@@ -40,7 +40,12 @@ Sequence.prototype.__tick = function (cb) {
 	if (task.args) {
 		args = args.concat(task.args);
 	}
-	task.worker.apply(task.worker, args);
+	try {
+    task.worker.apply(task.worker, args);
+  } catch (e) {
+		console.log('An error here', e);
+		args[0](e);
+	}
 };
 
 //
