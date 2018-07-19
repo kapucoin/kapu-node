@@ -12,6 +12,7 @@ var slots = require('../helpers/slots.js');
 var schema = require('../schema/transport.js');
 var sql = require('../sql/transport.js');
 var zlib = require('zlib');
+var semver = require('semver');
 
 // Private fields
 var modules, library, self, __private = {}, shared = {};
@@ -75,6 +76,9 @@ __private.attachApi = function () {
 
 			req.peer.os = headers.os;
 			req.peer.version = headers.version;
+			if (!semver.satisfies(headers.version, '^1.0.4')) {
+        return res.status(500).send({success: false, message: 'Request is made from non compatible peer', expected: library.config.nethash, received: headers.nethash});
+			}
 
 			modules.peers.accept(req.peer);
 

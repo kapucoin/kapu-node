@@ -9,7 +9,7 @@ var path = require('path');
 var Router = require('../helpers/router.js');
 var Peer = require('../logic/peer.js');
 var schema = require('../schema/peers.js');
-
+var semver = require('semver');
 // Private fields
 var modules, library, self, shared = {};
 
@@ -127,12 +127,15 @@ __private.updatePeersList = function (cb) {
 							api: '/status',
 							method: 'GET'
 						}, function (err, res) {
-							if (res.body && res.body.height) {
-								library.logger.debug("Adding peer", peer.ip);
-								self.accept(peer);
+							if (!err && res.body && res.body.height) {
+								if (semver.satisfies(peer.version, '^1.0.4')) {
+                  library.logger.debug("Adding peer", peer.ip);
+                  self.accept(peer);
+                }
+
 								return eachCb();
 							} else {
-								library.logger.error(['Rejecting invalid peer:', peer.ip, e.path, e.message].join(' '));
+								library.logger.error(['Rejecting invalid peer:', peer.ip, err.message].join(' '));
 								return eachCb();
 							}
 						});

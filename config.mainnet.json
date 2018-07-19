@@ -1,7 +1,7 @@
 {
   "port": 9700,
   "address": "0.0.0.0",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "fileLogLevel": "info",
   "logFileName": "logs/kapu.log",
   "consoleLogLevel": "info",
@@ -37,14 +37,7 @@
     "queryReach": 20,
     "minimumNetworkReach": 1,
     "list": [
-    
-    
-      { "ip": "51.15.89.225", "port": 9700},
-      { "ip": "145.239.90.228", "port": 4600},
-      { "ip": "144.217.242.167", "port": 4600},
-      { "ip": "51.15.201.243", "port": 4600},
-      { "ip": "45.32.29.180", "port": 4600}  
-
+      { "ip": "51.15.75.77", "port": 9700}
     ],
     "blackList": [],
     "options": {
