@@ -76,11 +76,12 @@ __private.attachApi = function () {
 
 			req.peer.os = headers.os;
 			req.peer.version = headers.version;
-			if (!semver.satisfies(headers.version, '^1.0.4')) {
-        return res.status(500).send({success: false, message: 'Request is made from non compatible peer', expected: library.config.nethash, received: headers.nethash});
-			}
 
-			modules.peers.accept(req.peer);
+			if (req.peer.version >= library.config.minimumVersion) {
+                modules.peers.accept(req.peer);
+            } else {
+                library.logger.debug("Peer version below minimum - " + req.peer.ip + ": " + req.peer.version);
+            }
 
 			return next();
 		});
