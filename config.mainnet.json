@@ -4,7 +4,7 @@
   "version": "1.0.4",
   "fileLogLevel": "info",
   "logFileName": "logs/kapu.log",
-  "consoleLogLevel": "info",
+  "consoleLogLevel": "debug",
   "trustProxy": false,
   "db": {
     "host": "localhost",
@@ -37,18 +37,26 @@
     "queryReach": 20,
     "minimumNetworkReach": 1,
     "list": [
-      { "ip": "54.37.131.42", "port": 9700},
-      { "ip": "54.36.114.235", "port": 9700},
-      { "ip": "54.39.56.243", "port": 9700},
-      { "ip": "147.135.219.24", "port": 9700},
-      { "ip": "54.37.76.240", "port": 9700},
-      { "ip": "54.38.91.242", "port": 9700},
-      { "ip": "54.36.102.201", "port": 9700},
-      { "ip": "80.241.218.21", "port": 4600},
-      { "ip": "145.239.90.228", "port": 4600},
-      { "ip": "144.217.242.167", "port": 4600},
-      { "ip": "51.15.201.243", "port": 4600},
-      { "ip": "45.32.29.180", "port": 4600}
+      {
+        "ip": "127.0.0.1",
+        "port": 9700
+      },
+      {
+        "ip": "127.0.0.2",
+        "port": 9700
+      },
+      {
+        "ip": "127.0.0.3",
+        "port": 9700
+      },
+      {
+        "ip": "127.0.0.4",
+        "port": 9700
+      },
+      {
+        "ip": "127.0.0.5",
+        "port": 9700
+      }
     ],
     "blackList": [],
     "options": {
@@ -86,5 +94,5 @@
     }
   },
   "network": "kapu",
-  "nethash": "313ea34c8eb705f79e7bc298b788417ff3f7116c9596f5c9875e769ee2f4ede1"
+  "nethash": "6cd80a9255a7e8ff4bb9388b6f252941f533f8a595502446c46a6f9351e6dcb0"
 }
